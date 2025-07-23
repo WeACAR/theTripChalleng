@@ -1,0 +1,14 @@
+@model theTripChalleng.ViewModels.LoginViewModel
+
+@* create a simple login form *@
+<form method="post" asp-action="Login">
+    <div>
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" />
+    </div>
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" />
+    </div>
+    <button type="submit">Login</button>
+</form>
