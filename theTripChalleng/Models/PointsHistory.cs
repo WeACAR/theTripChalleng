@@ -19,5 +19,5 @@ public partial class PointsHistory
 
     public virtual Criterion? Criteria { get; set; }
 
-    public virtual User1? User { get; set; }
+    public virtual User? User { get; set; }
 }

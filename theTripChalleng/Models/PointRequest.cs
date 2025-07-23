@@ -25,5 +25,5 @@ public partial class PointRequest
 
     public virtual RequestStatus? Status { get; set; }
 
-    public virtual User1 User { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }

@@ -11,5 +11,5 @@ public partial class Rule
 
     public string? RuleName { get; set; }
 
-    public virtual ICollection<User1> User1s { get; set; } = new List<User1>();
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }
