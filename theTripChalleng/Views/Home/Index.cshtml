@@ -47,3 +47,11 @@
 <div class="mt-auto d-flex position-absolute bottom-0 mb-5">
     <a href="@Url.Action("RequestPoints", "Points")" class="btn btn-primary ms-auto">Request Points</a>
 </div>
+
+@* add request points button only visible to user with rule admin *@
+@if (Context.Session.GetString("UserRole") == "admin")
+{
+    <div class="mt-auto d-flex position-absolute bottom-0 mb-5">
+        <a href="@Url.Action("RequestPoints", "Points")" class="btn btn-primary ms-auto">Request Points</a>
+    </div>
+}

@@ -43,6 +43,8 @@ namespace theTripChalleng.Controllers.Home
                     if (user != null)
                     {
                         HttpContext.Session.SetInt32("UserId", (int)user.Id);
+                        HttpContext.Session.SetString("UserName", user.Name);
+                        HttpContext.Session.SetString("UserRole", user.Rule?.RuleName ?? "User");
                         // TODO: Implement authentication
                         return RedirectToAction("Index", "Home");
                     }
