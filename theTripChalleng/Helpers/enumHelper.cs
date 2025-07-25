@@ -21,5 +21,14 @@ namespace theTripChalleng.Helpers
         }
 
         // Add more enums as needed
+
+        public enum AllowedPoints
+        {
+            Five = 5,
+            Ten = 10,
+            Fifteen = 15,
+            Twenty = 20,
+            TwentyFive = 25
+        }
     }
 }

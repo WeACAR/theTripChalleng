@@ -1,0 +1,68 @@
+@model theTripChalleng.ViewModel.PointRequestViewModel
+
+@{
+    ViewData["Title"] = "Request Points";
+}
+@* build request form as in the controller: category, criteria, Points, and proof *@
+<form asp-action="RequestPoints" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        @* set default selected value for category *@
+        <label></label>
+        <select id="categoryDropdown" class="form-control">
+            <option value="">Select Category</option>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <option value="@category.Value">@category.Text</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="CriterionId"></label>
+        <select id="criteriaDropdown" asp-for="CriterionId" class="form-control">
+            <option value="">Select Criteria</option>
+            
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="RequestedPoints"></label>
+        <select asp-for="RequestedPoints" class="form-control" asp-items="ViewBag.AllowedPoints"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Proof"></label>
+        <input asp-for="Proof" type="text" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary mt-4">Submit</button>
+</form>
+
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $('#categoryDropdown').change(function () {
+            var categoryId = $(this).val();
+            $.getJSON('/Points/GetCriteriaByCategory', { categoryId: categoryId }, function (data) {
+                var criteriaDropdown = $('#criteriaDropdown');
+                criteriaDropdown.empty();
+                $.each(data, function (i, item) {
+                    criteriaDropdown.append($('<option>', {
+                        value: item.value,
+                        text: item.text
+                    }));
+                });
+            });
+        });
+
+    </script>
+}
