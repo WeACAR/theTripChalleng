@@ -1,14 +1,45 @@
 @model IEnumerable<theTripChalleng.Models.User>
 
-<h1>@ViewData["Title"]</h1>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a> MVC.</p>
-    <ul>
-        @foreach (var user in Model)
-        {
-            <li>@user.Name</li>
-        }
-    </ul>
+@* this page shows a leaderboard of users with columns of image(optionally), name, total points sorted by total points *@
+@{
+    ViewData["Title"] = "Leaderboard";
+}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Leaderboard</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>الرتبة</th>
+                    <th>الاسم</th>
+                    <th>إجمالي النقاط</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var rank = 1;
+                }
+                @foreach (var user in Model.OrderByDescending(u => u.TotalPoints).Take(10))
+                {
+                    <tr>
+                        <td>@rank</td>
+                        <td>
+                            @if (user.Image != null)
+                            {
+                                <img src="data:image/png;base64,@Convert.ToBase64String(user.Image)" alt="@user.Name" class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
+                            }
+                            else
+                            {
+                                <img src="/Img/Avatar.jpg" alt="@user.Name" class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
+                            }
+                            @user.Name
+                        </td>
+                        <td>@user.TotalPoints</td>
+                    </tr>
+                    rank++;
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

@@ -1,0 +1,125 @@
+@model theTripChalleng.ViewModels.EditProfileViewModel
+@* this is user Edit page *@
+@{
+    ViewData["Title"] = "Edit User";
+}
+@* this page allows the user to edit their information: Name, Phone Number, Password, and Image *@
+@* Note: Password field should be handled securely, consider using a password hash and not displaying it in plain text *@
+<div class="row">
+    <div class="col-12">
+        <h2>@Model.Name</h2>
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <div>
+                    <div class="d-flex align-items-start justify-content-center mb-3">
+                        <div class="img-responsive w-25 d-flex align-items-start justify-content-center">
+                            @if (Model.Image != null)
+                            {
+                                <img src="data:image/png;base64,@Convert.ToBase64String(Model.Image)" alt="@Model.Name" class="img-fluid rounded-circle" />
+                                @* remove icon inside the button *@
+                               <button type="button" class="btn btn-danger" onclick="deleteImage(this)">
+                                    <i class="bi bi-trash"></i> 
+                                </button>
+                            }
+                            else
+                            {
+                                <img src="/Img/Avatar.jpg" alt="@Model.Name" class="img-fluid" />
+                            }
+                        </div>
+                        <input type="hidden" asp-for="IsImageDeleted" />
+                    </div>
+                    <div>
+                        <label asp-for="ImageFile">Upload Image</label>
+                        <input type="file" asp-for="ImageFile" class="form-control-file" accept="image/*" />
+                        <span class="text-muted">أو اسحب وأفلت الصورة هنا</span>
+                    </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone"></label>
+                <input asp-for="Phone" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <div class="position-relative">
+                    <input asp-for="Password" type="password" class="form-control pe-5" id="passwordInput" />
+                    <i class="bi bi-eye position-absolute top-50 end-0 translate-middle-y me-3" id="togglePassword" style="cursor: pointer;"></i>
+                </div>
+                <span class="text-muted">أتركه فارغًا للاحتفاظ بكلمة المرور الحالية.</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword"></label>
+                <div class="position-relative">
+                    <input asp-for="ConfirmPassword" type="password" class="form-control pe-5" id="confirmPasswordInput" />
+                    <i class="bi bi-eye position-absolute top-50 end-0 translate-middle-y me-3" id="toggleConfirmPassword" style="cursor: pointer;"></i>
+                </div>
+                <span class="text-muted">أتركه فارغًا للاحتفاظ بكلمة المرور الحالية.</span>
+            </div>
+            <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+            <a href="@Url.Action("Details", "Account")" class="btn btn-danger">إلغاء</a>
+        </form>
+    </div>
+</div>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function deleteImage(btn) {
+            // Change the image to the default avatar
+            btn.closest('div').querySelector('img').src = '/Img/Avatar.jpg';
+            
+            this.classList.add('d-none'); // Hide the delete button
+            // Set the hidden input to true
+            document.getElementById('IsImageDeleted').value = true;
+        }
+
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            var passwordField = document.querySelector('input[name="Password"]');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+            }
+        });
+
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
+            var confirmPasswordField = document.querySelector('input[name="ConfirmPassword"]');
+            if (confirmPasswordField.type === 'password') {
+                confirmPasswordField.type = 'text';
+            } else {
+                confirmPasswordField.type = 'password';
+            }
+        });
+        // Handle image upload
+        document.querySelector('input[type=file]').addEventListener('change', function (event) {
+            var file = event.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.querySelector('img').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle image removal
+        document.querySelector('button.btn-secondary').addEventListener('click', function () {
+            document.querySelector('input[type=file]').value = '';
+            document.querySelector('img').src = '/Img/Avatar.jpg';
+        });
+    </script>
+}

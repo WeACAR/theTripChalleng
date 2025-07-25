@@ -25,4 +25,17 @@ namespace theTripChalleng.ViewModels
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
     }
+
+    // edit profile view model
+    public class EditProfileViewModel
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string Phone { get; set; }
+        public string? Password { get; set; }
+        public string? ConfirmPassword { get; set; }
+        public byte[]? Image { get; set; } // Optional image field
+        public IFormFile? ImageFile { get; set; }
+        public bool IsImageDeleted { get; set; }
+    }
 }

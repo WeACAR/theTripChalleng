@@ -3,12 +3,18 @@
 @* create a simple login form *@
 <form method="post" asp-action="Login">
     <div>
-        <label asp-for="Phone"></label>
+        <label asp-for="Phone">رقم الهاتف</label>
         <input asp-for="Phone" />
     </div>
     <div>
-        <label asp-for="Password"></label>
+        <label asp-for="Password">كلمة المرور</label>
         <input asp-for="Password" type="password" />
     </div>
-    <button type="submit">Login</button>
+
+    <div class="text-danger fs-6">
+        <p>هل نسيت كلمة المرور؟</p>
+        <p>يرجى الاتصال بالمسؤول لإعادة تعيين كلمة المرور الخاصة بك.</p>
+    </div>
+    
+    <button type="submit">تسجيل الدخول</button>
 </form>

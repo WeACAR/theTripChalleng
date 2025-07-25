@@ -19,6 +19,8 @@ public partial class User
 
     public long? RuleId { get; set; }
 
+    public byte[]? Image { get; set; }
+
     public virtual ICollection<PointRequest> PointRequests { get; set; } = new List<PointRequest>();
 
     public virtual ICollection<PointsHistory> PointsHistories { get; set; } = new List<PointsHistory>();
