@@ -15,6 +15,8 @@ public partial class Criterion
 
     public long? CategoryId { get; set; }
 
+    public string? CriteriaName { get; set; }
+
     public virtual Category? Category { get; set; }
 
     public virtual ICollection<PointRequest> PointRequests { get; set; } = new List<PointRequest>();

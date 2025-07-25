@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using theTripChalleng.Data;
 using System;
+using theTripChalleng.ViewModel;
 
 namespace theTripChalleng.ViewModels
 {
@@ -37,5 +38,17 @@ namespace theTripChalleng.ViewModels
         public byte[]? Image { get; set; } // Optional image field
         public IFormFile? ImageFile { get; set; }
         public bool IsImageDeleted { get; set; }
+    }
+
+    // ViewModel for user details containing user information, points history, and point requests
+    public class UserDetailsViewModel
+    {
+        public User User { get; set; }
+        public List<PointsHistoryViewModel> PointsHistory { get; set; }
+        public List<PointRequestViewModel> PointsRequests { get; set; }
+
+        public string RoleName { get; set; }
+
+
     }
 }

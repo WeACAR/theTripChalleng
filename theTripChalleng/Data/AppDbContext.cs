@@ -74,6 +74,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("now()")
                 .HasColumnName("created_at");
+            entity.Property(e => e.CriteriaName).HasColumnType("character varying");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Criteria)
                 .HasForeignKey(d => d.CategoryId)

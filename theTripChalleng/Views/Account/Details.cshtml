@@ -1,23 +1,67 @@
 @* this is the account details page shows user information: Image, Name, Phone Number, Total Points with edit option (for edit all fields) *@
-@model theTripChalleng.Models.User
+@model theTripChalleng.ViewModels.UserDetailsViewModel
 
 <div class="row">
     <div class="col-md-4">
         <h2>User Details</h2>
         @* if model image is null then set default image to avatar *@
-        @if (Model.Image == null)
+        @if (Model.User.Image == null)
         {
-            <img src="/Img/Avatar.jpg" alt="@Model.Name" class="img-fluid" />
+            <img src="/Img/Avatar.jpg" alt="@Model.User.Name" class="img-fluid" />
         }
         else
         {
-            <img src="data:image/png;base64,@Convert.ToBase64String(Model.Image)" alt="@Model.Name" class="img-fluid rounded-circle" />
+            <img src="data:image/png;base64,@Convert.ToBase64String(Model.User.Image)" alt="@Model.User.Name"
+                class="img-fluid rounded-circle" />
         }
     </div>
     <div class="col-md-8">
-        <h2>@Model.Name</h2>
-        <p><strong>Phone Number:</strong> @Model.Phone</p>
-        <p><strong>Total Points:</strong> @Model.TotalPoints</p>
-        <a href="@Url.Action("Edit", "Account", new { id = Model.Id })" class="btn btn-primary">Edit</a>
+        <div class="card p-2 align-items-start">
+            <h2>@Model.User.Name</h2>
+            <p><strong>Phone Number:</strong> @Model.User.Phone</p>
+            <p><strong>Total Points:</strong> @Model.User.TotalPoints</p>
+            <a href="@Url.Action("Edit", "Account", new { id = Model.User.Id })" class="btn btn-primary ms-auto">Edit</a>
+        </div>
+        <div class="card mt-3">
+            <h3>Points History</h3>
+            @if (Model.PointsHistory.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var point in Model.PointsHistory.OrderByDescending(p => p.CreatedAt))
+                    {
+                        <li class="list-group-item">
+                            <strong>@point.CreatedAt.ToShortDateString()</strong> - @point.Points points
+                            <span class="text-muted">@(@point.CriterionName ?? "No Criterion")</span>
+                            <span class="text-muted">@(@point.UserName ?? "No User")</span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No points history available.</p>
+            }
+        </div>
+
+        <div class="card mt-3">
+            <h3>Points Requests</h3>
+            @if (Model.PointsRequests.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var request in Model.PointsRequests.OrderByDescending(r => r.CreatedAt))
+                    {
+                        <li class="list-group-item">
+                            <strong>@request.CreatedAt.ToShortDateString()</strong> - @request.RequestedPoints points
+                            <span class="text-muted">@request.CriterionName</span>
+                            <span class="badge bg-secondary">@request.StatusName</span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No points requests available.</p>
+            }
+        </div>
     </div>
 </div>

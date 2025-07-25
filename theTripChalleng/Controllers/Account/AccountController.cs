@@ -1,7 +1,10 @@
 // create a full controller for Account
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using theTripChalleng.Data;
 using theTripChalleng.Models;
+using theTripChalleng.ViewModel;
+
 // Add the following line if LoginViewModel is in a different namespace
 using theTripChalleng.ViewModels;
 
@@ -63,18 +66,66 @@ namespace theTripChalleng.Controllers.Home
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
-            {
                 return RedirectToAction("Login");
-            }
 
-            var user = _context.Users.Find((long)userId);
+            // ✅ Load user with related data (only what we really need)
+            var user = _context.Users
+                .Include(u => u.Rule)
+                .FirstOrDefault(u => u.Id == userId);
+
             if (user == null)
-            {
                 return NotFound();
-            }
 
-            return View(user);
+            // ✅ Load related data separately (simpler logic)
+            var pointsHistory = _context.PointsHistories
+                .Include(ph => ph.Criteria)
+                .Where(ph => ph.UserId == userId)
+                .ToList();
+
+            var pointsRequests = _context.PointRequests
+                .Include(pr => pr.Criteria)
+                .Include(pr => pr.Status)
+                .Where(pr => pr.UserId == userId)
+                .ToList();
+
+            // ✅ Now just map to ViewModels (values already loaded)
+            var historyVM = pointsHistory.Select(ph => new PointsHistoryViewModel
+            {
+                Id = ph.Id,
+                UserId = ph.UserId ?? 0,
+                UserName = user.Name, // already loaded user
+                CriterionId = ph.CriteriaId ?? 0,
+                CriterionName = ph.Criteria?.CriteriaName,
+                Points = ph.Points ?? 0,
+                CreatedAt = ph.CreatedAt
+            }).ToList();
+
+            var requestsVM = pointsRequests.Select(pr => new PointRequestViewModel
+            {
+                Id = pr.RequestId,
+                UserId = pr.UserId,
+                UserName = user.Name, // already loaded user
+                CriterionId = pr.CriteriaId ?? 0,
+                CriterionName = pr.Criteria?.CriteriaName,
+                RequestedPoints = pr.RequestedPoints ?? 0,
+                Proof = pr.Proof,
+                AdminComment = pr.AdminComment,
+                CreatedAt = pr.CreatedAt,
+                StatusName = pr.Status?.StatusName
+            }).ToList();
+
+            var model = new UserDetailsViewModel
+            {
+                User = user,
+                PointsHistory = historyVM,
+                PointsRequests = requestsVM,
+                RoleName = user.Rule?.RuleName
+            };
+
+            return View(model);
         }
+
+
 
         //edit action
         [HttpGet]
