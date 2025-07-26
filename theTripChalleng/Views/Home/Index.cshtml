@@ -31,10 +31,22 @@
                         <h6 class="dropdown-header">Pending Requests</h6>
                         @foreach (var request in ViewBag.PendingRequests)
                         {
-                            <a class="dropdown-item" href="@Url.Action("RequestInfo", "Points", new { requestId = request.RequestId })">
-                                <img src="data:image/png;base64,@Convert.ToBase64String(request.User.Image)" alt="@request.User.Name"
-                                class="img-fluid rounded-circle" style="width: 30px; height: 30px;" />
-                                @request.User.Name - @request.RequestedPoints points
+                            @* fix that the image is causing overflow for text (looks like the image is not widen the width of dropdown menu and take regular space) *@
+                            @* container containers user Image and Name and points (make image next to the text (not inside)) when click to go to request details *@
+                            <a class="dropdown-item" href="@Url.Action("RequestInfo", "Points", new { requestId = request.RequestId })" style="margin-right: 40px;">
+                                <div class="d-flex align-items-center">
+                                    @if (request.User.Image != null)
+                                    {
+                                        <img src="data:image/png;base64,@Convert.ToBase64String(request.User.Image)" alt="@request.User.Name"
+                                            class="img-fluid rounded-circle me-2" style="width: 30px; height: 30px;" />
+                                    }
+                                    else
+                                    {
+                                        <img src="/Img/Avatar.jpg" alt="@request.User.Name" class="img-fluid rounded-circle me-2"
+                                            style="width: 30px; height: 30px;" />
+                                    }
+                                    <span>@request.User.Name - @request.RequestedPoints points</span>
+                                </div>
                             </a>
                         }
                     }

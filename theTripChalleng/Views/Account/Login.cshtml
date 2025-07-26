@@ -4,7 +4,7 @@
 <form method="post" asp-action="Login">
     <div>
         <label asp-for="Phone">رقم الهاتف</label>
-        <input asp-for="Phone" />
+        <input asp-for="Phone" maxlength="10" />
     </div>
     <div>
         <label asp-for="Password">كلمة المرور</label>
@@ -18,3 +18,23 @@
     
     <button type="submit">تسجيل الدخول</button>
 </form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+@* alert for exceptions *@
+@if (ViewData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @ViewData["ErrorMessage"]
+    </div>
+}

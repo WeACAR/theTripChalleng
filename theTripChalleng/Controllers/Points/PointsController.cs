@@ -213,7 +213,7 @@ namespace theTripChalleng.Controllers.Points
 
         // create action to approve or reject request (the form has admin comments in string to store it in PointRequest with the action "approve" or "reject")
         [HttpPost]
-        public async Task<IActionResult> UpdateRequest(long requestId, string action, string comment)
+        public async Task<IActionResult> UpdateRequest(long requestId, string action, string comment, int requestedPoints = 0)
         {
             var pointRequest = await _context.PointRequests.FindAsync(requestId);
             if (pointRequest == null)
@@ -230,14 +230,14 @@ namespace theTripChalleng.Controllers.Points
                 {
                     UserId = pointRequest.UserId,
                     CriteriaId = pointRequest.CriteriaId,
-                    Points = pointRequest.RequestedPoints,
+                    Points = requestedPoints > 0 ? requestedPoints : pointRequest.RequestedPoints,
                     CreatedAt = DateTime.UtcNow,
                     ApprovedBy = HttpContext.Session.GetString("UserName")
                 };
                 var user = await _context.Users.FindAsync(pointRequest.UserId);
                 if (user != null)
                 {
-                    user.TotalPoints += pointRequest.RequestedPoints;
+                    user.TotalPoints += requestedPoints > 0 ? requestedPoints : pointRequest.RequestedPoints;
                 }
             }
             else if (action == "reject")

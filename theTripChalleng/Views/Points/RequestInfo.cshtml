@@ -13,7 +13,12 @@
 
 <h3>Actions</h3>
 <form asp-action="UpdateRequest" method="post">
-        <input type="hidden" name="RequestId" value="@Model.RequestId" />
+    @* add ability to modify points if needed *@
+    <div class="form-group">
+        <label for="RequestedPoints">Requested Points</label>
+        <input type="number" class="form-control" id="RequestedPoints" name="RequestedPoints" value="@Model.RequestedPoints" />
+    </div>
+    <input type="hidden" name="RequestId" value="@Model.RequestId" />
     <div class="form-group">
         <label for="Comment">Comment</label>
         <textarea class="form-control" id="Comment" name="Comment" rows="3"></textarea>
