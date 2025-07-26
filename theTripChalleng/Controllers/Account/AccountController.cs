@@ -39,7 +39,9 @@ namespace theTripChalleng.Controllers.Home
 
                 if (ModelState.IsValid)
                 {
-                    var user = _context.Users.FirstOrDefault(u => u.Phone == model.Phone && u.Password == model.Password);
+                    var user = _context.Users
+                    .Include(u => u.Rule)
+                    .FirstOrDefault(u => u.Phone == model.Phone && u.Password == model.Password);
                     if (user != null)
                     {
                         HttpContext.Session.SetInt32("UserId", (int)user.Id);

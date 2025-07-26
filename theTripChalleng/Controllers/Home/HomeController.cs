@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using theTripChalleng.Data;
-
+using theTripChalleng.Helpers;
 
 namespace theTripChalleng.Controllers
 {
@@ -16,6 +16,16 @@ namespace theTripChalleng.Controllers
         [SessionAuthorize]
         public IActionResult Index()
         {
+            // viewbag for pending requestPoints
+            ViewBag.PendingRequestsCount = _context.PointRequests
+                .Where(pr => pr.StatusId == (int)EnumHelper.RequestStatus.Pending)
+                .Count();
+
+            // ViewBag.PendingRequests for pending points requests
+            ViewBag.PendingRequests = _context.PointRequests
+                .Where(pr => pr.StatusId == (int)EnumHelper.RequestStatus.Pending)
+                .OrderByDescending(pr => pr.CreatedAt)
+                .ToList();
             //check session and redirect
             if (HttpContext.Session.GetInt32("UserId") == null)
             {

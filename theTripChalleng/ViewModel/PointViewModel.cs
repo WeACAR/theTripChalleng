@@ -30,8 +30,8 @@ namespace theTripChalleng.ViewModel
         public string? Status { get; set; } // Use enum for status if needed
         public string? StatusName { get; set; }
 
-        public virtual User User { get; set; } = null!;
-        public virtual Criterion Criterion { get; set; } = null!;
+        public virtual User? User { get; set; } = null!;
+        public virtual Criterion? Criterion { get; set; } = null!;
     }
 
     //view model for PointsHistory
@@ -49,7 +49,7 @@ namespace theTripChalleng.ViewModel
 
         public long Points { get; set; }
 
-        public virtual User User { get; set; } = null!;
-        public virtual Criterion Criterion { get; set; } = null!;
+        public virtual User? User { get; set; } = null!;
+        public virtual Criterion? Criterion { get; set; } = null!;
     }
 }

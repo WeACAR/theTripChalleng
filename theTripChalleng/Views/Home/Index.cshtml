@@ -1,13 +1,46 @@
 @model IEnumerable<theTripChalleng.Models.User>
 
-
+@{
+    var userRole = Context.Session.GetString("UserRole");
+}
 @* this page shows a leaderboard of users with columns of image(optionally), name, total points sorted by total points *@
 @{
     ViewData["Title"] = "Leaderboard";
 }
 <div class="row">
     <div class="col-md-12">
-        <h2>Leaderboard</h2>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>Leaderboard</h1>
+            @* make a button as ring for notification with icon *@
+            @* the button open a dropdown menu to list the request quick information *@
+            <button class="btn btn-outline-primary position-relative" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-bell"></i>
+                @if(ViewBag.PendingRequestsCount > 0)
+                {
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        @ViewBag.PendingRequestsCount
+                    </span>
+                }
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                @if (ViewBag.PendingRequestsCount > 0)
+                {
+                    <h6 class="dropdown-header">Pending Requests</h6>
+                    @foreach (var request in ViewBag.PendingRequests)
+                    {
+                        <a class="dropdown-item" href="@Url.Action("RequestInfo", "Points", new { requestId = request.RequestId })">
+                            <img src="data:image/png;base64,@Convert.ToBase64String(request.User.Image)" alt="@request.User.Name"
+                            class="img-fluid rounded-circle" style="width: 30px; height: 30px;" />
+                            @request.User.Name - @request.RequestedPoints points
+                        </a>
+                    }
+                }
+                else
+                {
+                    <span class="dropdown-item text-muted">No pending requests</span>
+                }
+            </div>
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -27,11 +60,13 @@
                         <td>
                             @if (user.Image != null)
                             {
-                                <img src="data:image/png;base64,@Convert.ToBase64String(user.Image)" alt="@user.Name" class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
+                                <img src="data:image/png;base64,@Convert.ToBase64String(user.Image)" alt="@user.Name"
+                                    class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
                             }
                             else
                             {
-                                <img src="/Img/Avatar.jpg" alt="@user.Name" class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
+                                <img src="/Img/Avatar.jpg" alt="@user.Name" class="img-fluid rounded-circle"
+                                    style="width: 50px; height: 50px;" />
                             }
                             @user.Name
                         </td>
@@ -45,13 +80,15 @@
 </div>
 
 <div class="mt-auto d-flex position-absolute bottom-0 mb-5">
-    <a href="@Url.Action("RequestPoints", "Points")" class="btn btn-primary ms-auto">Request Points</a>
-</div>
-
-@* add request points button only visible to user with rule admin *@
-@if (Context.Session.GetString("UserRole") == "admin")
-{
-    <div class="mt-auto d-flex position-absolute bottom-0 mb-5">
+    <div>
         <a href="@Url.Action("RequestPoints", "Points")" class="btn btn-primary ms-auto">Request Points</a>
     </div>
-}
+
+    @* add request points button only visible to user with rule admin *@
+    @if (userRole == "Admin")
+    {
+        <div class="ms-3">
+            <a href="@Url.Action("AddPoints", "Points")" class="btn btn-primary ms-auto">Add Points</a>
+        </div>
+    }
+</div>

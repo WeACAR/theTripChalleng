@@ -1,0 +1,68 @@
+
+@model theTripChalleng.ViewModel.PointsHistoryViewModel
+
+@{
+    ViewBag.Title = "Add Points";
+}
+
+<h2>Add Points</h2>
+
+<form asp-action="AddPoints" method="post">
+    <div class="form-group">
+        <label asp-for="UserId"></label>
+        <select asp-for="UserId" class="form-control" asp-items="ViewBag.Users"></select>
+    </div>
+    <div class="form-group">
+        <label></label>
+        <select id="categoryDropdown" class="form-control">
+            <option value="">Select Category</option>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <option value="@category.Value">@category.Text</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="CriterionId"></label>
+        <select id="criteriaDropdown" asp-for="CriterionId" class="form-control">
+            <option value="">Select Criteria</option>
+            
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Points"></label>
+        <input asp-for="Points" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Add Points</button>
+</form>
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $('#categoryDropdown').change(function () {
+            var categoryId = $(this).val();
+            $.getJSON('/Points/GetCriteriaByCategory', { categoryId: categoryId }, function (data) {
+                var criteriaDropdown = $('#criteriaDropdown');
+                criteriaDropdown.empty();
+                $.each(data, function (i, item) {
+                    criteriaDropdown.append($('<option>', {
+                        value: item.value,
+                        text: item.text
+                    }));
+                });
+            });
+        });
+
+    </script>
+}

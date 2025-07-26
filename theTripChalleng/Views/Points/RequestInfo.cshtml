@@ -1,0 +1,25 @@
+@* display request Information with ability to approve or reject and add admin comments *@
+@model theTripChalleng.Models.PointRequest
+<h2>Request Information</h2>
+<div>
+    <p><strong>User:</strong> @Model.User.Name</p>
+    <p><strong>Criteria:</strong> @Model.Criteria.CriteriaName</p>
+    <p><strong>Requested Points:</strong> @Model.RequestedPoints</p>
+    <p><strong>Status:</strong> @Model.Status.StatusName</p>
+</div>
+<div>
+    <p><strong>Request Date:</strong> @Model.CreatedAt.ToString("g")</p>
+</div>
+
+<h3>Actions</h3>
+<form asp-action="UpdateRequest" method="post">
+        <input type="hidden" name="RequestId" value="@Model.RequestId" />
+    <div class="form-group">
+        <label for="Comment">Comment</label>
+        <textarea class="form-control" id="Comment" name="Comment" rows="3"></textarea>
+    </div>
+
+    <input type="hidden" name="RequestId" value="@Model.RequestId" />
+    <button type="submit" class="btn btn-success" name="action" value="approve">Approve</button>
+    <button type="submit" class="btn btn-danger" name="action" value="reject">Reject</button>
+</form>
