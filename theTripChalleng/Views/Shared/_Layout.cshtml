@@ -16,17 +16,13 @@
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header class="position-fixed position-sm-related bottom-0 w-100 mx-4" style="z-index: 1030;">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 mx-5">
             <div class="container">
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
+                <div class="d-inline-flex w-100 justify-content-between">
+                    <ul class="navbar-nav flex-row justify-content-around justify-content-sm-start flex-grow-1">
+                        <li class="nav-item d-none d-sm-inline-block">
                             <a class="navbar-brand" asp-controller="Home" asp-action="Index">theTripChalleng</a>
                         </li>
 
@@ -35,16 +31,25 @@
                         {
                             <li class="nav-item">
                                 @* take to user details page  MVC *@
-                                <a class="nav-link" asp-controller="Account" asp-action="Details">معلومات المستخدم</a>
+                                @* add icon *@
+                                <a class="nav-link" asp-controller="Account" asp-action="Details">
+                                    <i class="bi bi-person"></i> <span class="d-none d-sm-inline">الملف الشخصي</span>
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Rewards">المكافآت</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="Rewards">
+                                    <i class="bi bi-gift"></i> <span class="d-none d-sm-inline">المكافآت</span>
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="LeaderboardByCategory">المتصدرين حسب اللجنة</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="LeaderboardByCategory">
+                                    <i class="bi bi-trophy"></i> <span class="d-none d-sm-inline">قائمة المتصدرين</span>
+                                </a>
                             </li>
-                            <li class="ms-auto nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Logout">تسجيل الخروج</a>
+                            <li class="ms-sm-auto nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Logout">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    </a>
                             </li>
                         }
                     </ul>

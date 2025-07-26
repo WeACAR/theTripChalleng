@@ -144,6 +144,20 @@
                 </div>
             }
         </div>
+        <div class="mt-auto d-flex mb-2">
+            <div>
+                <a href="@Url.Action("RequestPoints", "Points")" class="btn btn-primary ms-auto">طلب نقاط</a>
+            </div>
+
+            @* add request points button only visible to user with rule admin *@
+            @if (userRole == "Admin")
+            {
+                <div class="ms-3">
+                    <a href="@Url.Action("AddPoints", "Points")" class="btn btn-primary ms-auto">إضافة نقاط</a>
+                </div>
+            }
+        </div>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -180,20 +194,6 @@
             </tbody>
         </table>
     </div>
-</div>
-
-<div class="mt-auto d-flex position-fixed bottom-0 mb-5">
-    <div>
-        <a href="@Url.Action("RequestPoints", "Points")" class="btn btn-primary ms-auto">طلب نقاط</a>
-    </div>
-
-    @* add request points button only visible to user with rule admin *@
-    @if (userRole == "Admin")
-    {
-        <div class="ms-3">
-            <a href="@Url.Action("AddPoints", "Points")" class="btn btn-primary ms-auto">إضافة نقاط</a>
-        </div>
-    }
 </div>
 
 @section Scripts {
