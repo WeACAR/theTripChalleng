@@ -16,6 +16,8 @@ public partial class AppDbContext : DbContext
     {
     }
 
+    public virtual DbSet<AssignedCritera> AssignedCriteras { get; set; }
+
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Criterion> Criteria { get; set; }
@@ -52,6 +54,18 @@ public partial class AppDbContext : DbContext
             .HasPostgresExtension("graphql", "pg_graphql")
             .HasPostgresExtension("vault", "supabase_vault");
 
+        modelBuilder.Entity<AssignedCritera>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("AssignedCritera_pkey");
+
+            entity.ToTable("AssignedCritera");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("now()")
+                .HasColumnName("created_at");
+        });
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("Category_pkey");
@@ -75,6 +89,7 @@ public partial class AppDbContext : DbContext
                 .HasDefaultValueSql("now()")
                 .HasColumnName("created_at");
             entity.Property(e => e.CriteriaName).HasColumnType("character varying");
+            entity.Property(e => e.IsAssignable).HasColumnName("isAssignable");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Criteria)
                 .HasForeignKey(d => d.CategoryId)

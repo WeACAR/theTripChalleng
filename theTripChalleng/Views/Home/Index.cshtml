@@ -9,37 +9,42 @@
 }
 <div class="row">
     <div class="col-md-12">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1>Leaderboard</h1>
+        <div class="d-flex flex-row-reverse justify-content-between align-items-center mb-3">
+            <h1>قائمة المتصدرين</h1>
             @* make a button as ring for notification with icon *@
             @* the button open a dropdown menu to list the request quick information *@
-            <button class="btn btn-outline-primary position-relative" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-bell"></i>
-                @if(ViewBag.PendingRequestsCount > 0)
-                {
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        @ViewBag.PendingRequestsCount
-                    </span>
-                }
-            </button>
-            <div class="dropdown-menu dropdown-menu-end">
-                @if (ViewBag.PendingRequestsCount > 0)
-                {
-                    <h6 class="dropdown-header">Pending Requests</h6>
-                    @foreach (var request in ViewBag.PendingRequests)
+            @if (userRole == "Admin")
+            {
+            <div class="dropdown">
+                <button class="btn btn-outline-primary position-relative" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell"></i>
+                    @if(ViewBag.PendingRequestsCount > 0)
                     {
-                        <a class="dropdown-item" href="@Url.Action("RequestInfo", "Points", new { requestId = request.RequestId })">
-                            <img src="data:image/png;base64,@Convert.ToBase64String(request.User.Image)" alt="@request.User.Name"
-                            class="img-fluid rounded-circle" style="width: 30px; height: 30px;" />
-                            @request.User.Name - @request.RequestedPoints points
-                        </a>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            @ViewBag.PendingRequestsCount
+                        </span>
                     }
-                }
-                else
-                {
-                    <span class="dropdown-item text-muted">No pending requests</span>
-                }
+                </button>
+                <div class="dropdown-menu dropdown-menu-end">
+                    @if (ViewBag.PendingRequestsCount > 0)
+                    {
+                        <h6 class="dropdown-header">Pending Requests</h6>
+                        @foreach (var request in ViewBag.PendingRequests)
+                        {
+                            <a class="dropdown-item" href="@Url.Action("RequestInfo", "Points", new { requestId = request.RequestId })">
+                                <img src="data:image/png;base64,@Convert.ToBase64String(request.User.Image)" alt="@request.User.Name"
+                                class="img-fluid rounded-circle" style="width: 30px; height: 30px;" />
+                                @request.User.Name - @request.RequestedPoints points
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <span class="dropdown-item text-muted">لا توجد طلبات معلقة</span>
+                    }
+                </div>
             </div>
+            }
         </div>
         <table class="table table-striped">
             <thead>
@@ -81,14 +86,14 @@
 
 <div class="mt-auto d-flex position-absolute bottom-0 mb-5">
     <div>
-        <a href="@Url.Action("RequestPoints", "Points")" class="btn btn-primary ms-auto">Request Points</a>
+        <a href="@Url.Action("RequestPoints", "Points")" class="btn btn-primary ms-auto">طلب نقاط</a>
     </div>
 
     @* add request points button only visible to user with rule admin *@
     @if (userRole == "Admin")
     {
         <div class="ms-3">
-            <a href="@Url.Action("AddPoints", "Points")" class="btn btn-primary ms-auto">Add Points</a>
+            <a href="@Url.Action("AddPoints", "Points")" class="btn btn-primary ms-auto">إضافة نقاط</a>
         </div>
     }
 </div>

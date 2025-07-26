@@ -259,7 +259,9 @@ namespace theTripChalleng.Controllers.Home
             return View(model);
         }
 
-        [HttpPost]
+        // Logout action
+        [SessionAuthorize]
+        [HttpGet]
         public IActionResult Logout()
         {
             // Clear the session

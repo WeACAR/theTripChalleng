@@ -1,0 +1,28 @@
+@* make the page to display the Rewards the user can get in cards showing img, name, min points *@
+@model IEnumerable<theTripChalleng.Models.Reward>
+
+@{
+    ViewData["Title"] = "Rewards";
+}
+
+<div class="row">
+    @foreach (var reward in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="@(reward.Image != null ? $"data:image/png;base64,{Convert.ToBase64String(reward.Image)}" : "/img/default-reward.png")" class="card-img-top" alt="@reward.Name" />
+                <div class="card-body text-end">
+                    <h5 class="card-title">@reward.Name</h5>
+                    <p class="card-text">نصاب الجائزة: @reward.MinPoints</p>
+                    <a href="@Url.Action("RewardDetails", "Rewards", new { rewardId = reward.Id })" class="btn btn-primary">التفاصيل</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No rewards available at the moment.
+        </div>
+    }

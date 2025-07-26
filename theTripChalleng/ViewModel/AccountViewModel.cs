@@ -51,4 +51,28 @@ namespace theTripChalleng.ViewModels
 
 
     }
+
+    // ViewModel for add reward (same but with image file)
+    public class AddRewardViewModel
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public long MinPoints { get; set; }
+        public long CategoryId { get; set; }
+        public IFormFile ImageFile { get; set; }
+        public byte[]? Image { get; set; } // Optional image field
+    }
+
+    // ViewModel for edit reward
+    public class EditRewardViewModel
+    {
+        public long Id { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public long? MinPoints { get; set; }
+        public long? CategoryId { get; set; }
+        public bool IsImageDeleted { get; set; } // Flag to indicate if the image should be deleted
+        public IFormFile? ImageFile { get; set; } // Optional image file for upload
+        public byte[]? Image { get; set; } // Optional image field
+    }
 }

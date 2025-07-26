@@ -17,6 +17,12 @@ public partial class Criterion
 
     public string? CriteriaName { get; set; }
 
+    public bool? IsAssignable { get; set; }
+
+    public long? MaxAssign { get; set; }
+
+    public long? AssignLeft { get; set; }
+
     public virtual Category? Category { get; set; }
 
     public virtual ICollection<PointRequest> PointRequests { get; set; } = new List<PointRequest>();
