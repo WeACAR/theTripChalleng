@@ -1,12 +1,43 @@
-@model IEnumerable<theTripChalleng.Models.User>
+@model theTripChalleng.ViewModels.HomeViewModel
 
-@{
-    var userRole = Context.Session.GetString("UserRole");
-}
 @* this page shows a leaderboard of users with columns of image(optionally), name, total points sorted by total points *@
 @{
     ViewData["Title"] = "Leaderboard";
+    var userRole = Context.Session.GetString("UserRole");
 }
+
+@* make row "Hello, ..." shows user name and points *@
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center" style="direction: rtl;">
+            <h1>مرحبا، @Context.Session.GetString("UserName")</h1>
+            <span>نقاطك: @Context.Session.GetInt32("UserPoints")</span>
+        </div>
+    </div>
+</div>
+
+@* row for Criteras that are assignable only *@
+@if (Model.Criterias != null && Model.Criterias.Any())
+{
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <h2>المعايير القابلة للتعيين</h2>
+            <ul class="list-group">
+                @foreach (var criteria in Model.Criterias)
+                {
+                    <li class="list-group-item">
+                        <strong>@criteria.CriteriaName:</strong> @criteria.AssignLeft
+                        <a href="@Url.Action("AssignCriteria", "Home", new { criteriaId = criteria.Id })"
+                            class="btn btn-primary">استلام</a>
+                    </li>
+
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
 <div class="row">
     <div class="col-md-12">
         <div class="d-flex flex-row-reverse justify-content-between align-items-center mb-3">
@@ -15,47 +46,102 @@
             @* the button open a dropdown menu to list the request quick information *@
             @if (userRole == "Admin")
             {
-            <div class="dropdown">
-                <button class="btn btn-outline-primary position-relative" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-bell"></i>
-                    @if(ViewBag.PendingRequestsCount > 0)
-                    {
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            @ViewBag.PendingRequestsCount
-                        </span>
-                    }
-                </button>
-                <div class="dropdown-menu dropdown-menu-end">
-                    @if (ViewBag.PendingRequestsCount > 0)
-                    {
-                        <h6 class="dropdown-header">Pending Requests</h6>
-                        @foreach (var request in ViewBag.PendingRequests)
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary position-relative" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-bell"></i>
+                        @if ((ViewBag.PendingRequestsCount + ViewBag.PendingAssignedCriteriaCount) > 0)
                         {
-                            @* fix that the image is causing overflow for text (looks like the image is not widen the width of dropdown menu and take regular space) *@
-                            @* container containers user Image and Name and points (make image next to the text (not inside)) when click to go to request details *@
-                            <a class="dropdown-item" href="@Url.Action("RequestInfo", "Points", new { requestId = request.RequestId })" style="margin-right: 40px;">
-                                <div class="d-flex align-items-center">
-                                    @if (request.User.Image != null)
-                                    {
-                                        <img src="data:image/png;base64,@Convert.ToBase64String(request.User.Image)" alt="@request.User.Name"
-                                            class="img-fluid rounded-circle me-2" style="width: 30px; height: 30px;" />
-                                    }
-                                    else
-                                    {
-                                        <img src="/Img/Avatar.jpg" alt="@request.User.Name" class="img-fluid rounded-circle me-2"
-                                            style="width: 30px; height: 30px;" />
-                                    }
-                                    <span>@request.User.Name - @request.RequestedPoints points</span>
-                                </div>
-                            </a>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                @(@ViewBag.PendingRequestsCount + @ViewBag.PendingAssignedCriteriaCount)
+                            </span>
                         }
-                    }
-                    else
-                    {
-                        <span class="dropdown-item text-muted">لا توجد طلبات معلقة</span>
-                    }
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        @* make dropdown tabs for pending requests and assigned criteria (tabs in heders to switch between notification type) *@
+                        <ul class="nav nav-tabs" id="notificationTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pendingRequests-tab" data-bs-toggle="tab"
+                                    data-bs-target="#pendingRequests" type="button" role="tab"
+                                    aria-controls="pendingRequests" aria-selected="true">طلبات النقاط</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="assignedCriteria-tab" data-bs-toggle="tab"
+                                    data-bs-target="#assignedCriteria" type="button" role="tab"
+                                    aria-controls="assignedCriteria" aria-selected="false">طلبات التعيين</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="notificationTabsContent">
+                            <div class="tab-pane fade show active" id="pendingRequests" role="tabpanel"
+                                aria-labelledby="pendingRequests-tab">
+                                @if (ViewBag.PendingRequestsCount > 0)
+                                {
+                                    @foreach (var request in ViewBag.PendingRequests)
+                                    {
+                                        @* fix that the image is causing overflow for text (looks like the image is not widen the width of dropdown menu and take regular space) *@
+                                        @* container containers user Image and Name and points (make image next to the text (not inside)) when click to go to request details *@
+                                        <a class="dropdown-item" href="@Url.Action("RequestInfo", "Points", new { requestId = request.RequestId })" style="margin-right: 40px;">
+                                            <div class="d-flex align-items-center">
+                                                @if (request.User.Image != null)
+                                                {
+                                                    <img src="data:image/png;base64,@Convert.ToBase64String(request.User.Image)" alt="@request.User.Name"
+                                                        class="img-fluid rounded-circle me-2" style="width: 30px; height: 30px;" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="/Img/Avatar.jpg" alt="@request.User.Name" class="img-fluid rounded-circle me-2"
+                                                        style="width: 30px; height: 30px;" />
+                                                }
+                                                <span>@request.User.Name - @request.RequestedPoints points</span>
+                                            </div>
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="dropdown-item text-muted">لا توجد طلبات معلقة</span>
+                                }
+                            </div>
+
+                        <div class="tab-pane fade" id="assignedCriteria" role="tabpanel"
+                            aria-labelledby="assignedCriteria-tab">
+                            @if (ViewBag.PendingAssignedCriteriaCount > 0)
+                            {
+                                <ul class="list-group">
+                                    @foreach (var assigned in ViewBag.PendingAssignedCriteria)
+                                    {
+                                        <li class="list-group-item">
+                                            <div class="d-flex" style="margin-right: 40px;">
+                                                @if (assigned.User.Image != null)
+                                                {
+                                                    <img src="data:image/png;base64,@Convert.ToBase64String(assigned.User.Image)" alt="@assigned.User.Name"
+                                                        class="img-fluid rounded-circle me-2" style="width: 30px; height: 30px;" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="/Img/Avatar.jpg" alt="@assigned.User.Name" class="img-fluid rounded-circle me-2"
+                                                        style="width: 30px; height: 30px;" />
+                                                }
+                                                <div class="d-flex text-nowrap flex-column">
+                                                    <strong>@assigned.User?.Name</strong> قام بتعيين معيار @assigned.Criteria?.CriteriaName
+                                                    <span class="text-muted">@assigned.AssignedCriterias.CreatedAt.ToString("g")</span>
+                                                    <div>
+                                                    <a href="@Url.Action("UpdateAssignedCriteria", "Home", new { assignedId = assigned.AssignedCriterias.Id, operation = "approve" })"
+                                                        class="btn btn-success btn-sm float-end">موافقة</a>
+                                                    <a href="@Url.Action("UpdateAssignedCriteria", "Home", new { assignedId = assigned.AssignedCriterias.Id, operation = "reject" })"
+                                                        class="btn btn-danger btn-sm float-end me-2">رفض</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                    </div>
+                    </div>
                 </div>
-            </div>
             }
         </div>
         <table class="table table-striped">
@@ -70,7 +156,7 @@
                 @{
                     var rank = 1;
                 }
-                @foreach (var user in Model.OrderByDescending(u => u.TotalPoints).Take(10))
+                @foreach (var user in Model.Leaderboard.OrderByDescending(u => u.TotalPoints).Take(10))
                 {
                     <tr>
                         <td>@rank</td>
@@ -96,7 +182,7 @@
     </div>
 </div>
 
-<div class="mt-auto d-flex position-absolute bottom-0 mb-5">
+<div class="mt-auto d-flex position-fixed bottom-0 mb-5">
     <div>
         <a href="@Url.Action("RequestPoints", "Points")" class="btn btn-primary ms-auto">طلب نقاط</a>
     </div>
@@ -109,3 +195,38 @@
         </div>
     }
 </div>
+
+@section Scripts {
+<script>
+    var triggerTabList = [].slice.call(document.querySelectorAll('#notificationTabs button'))
+    triggerTabList.forEach(function (triggerEl) {
+        var tabTrigger = new bootstrap.Tab(triggerEl)
+        triggerEl.addEventListener('click', function (event) {
+            event.preventDefault()
+            tabTrigger.show()
+        })
+    })
+
+    document.querySelectorAll('.dropdown-menu .nav-link').forEach(function(tabBtn) {
+    tabBtn.onclick = function(e) {
+        e.stopPropagation();
+        var target = document.querySelector(tabBtn.dataset.bsTarget);
+        document.querySelectorAll('.tab-pane').forEach(function(pane) {
+            pane.classList.remove('show', 'active');
+        });
+        target.classList.add('show', 'active');
+        document.querySelectorAll('.dropdown-menu .nav-link').forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+        tabBtn.classList.add('active');
+        };
+    });
+
+    // Prevent dropdown from closing when clicking tab buttons inside the dropdown
+    document.querySelectorAll('.dropdown-menu .nav-link').forEach(function(tabBtn) {
+        tabBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    });
+</script>
+}

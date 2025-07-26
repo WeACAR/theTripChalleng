@@ -1,0 +1,13 @@
+@* This view displays the details of a specific reward *@
+@model theTripChalleng.ViewModels.RewardDetailViewModel
+
+<h1>@Model.Reward?.Name</h1>
+<p>@Model.Reward?.Description</p>
+<p>Minimum Points Required: @Model.Reward?.MinPoints</p>
+
+@if (Model.Reward?.Image != null)
+{
+    <img src="@(Model.Reward?.Image != null ? $"data:image/png;base64,{Convert.ToBase64String(Model.Reward?.Image)}" : "/img/default-reward.png")" class="card-img-top" alt="@Model.Reward?.Name" />
+}
+<p>Available: @Model.Category?.CategoryName</p>
+<p>Created on: @Model.Reward?.CreatedAt.ToString("dd/MM/yyyy")</p>

@@ -47,6 +47,7 @@ namespace theTripChalleng.Controllers.Home
                         HttpContext.Session.SetInt32("UserId", (int)user.Id);
                         HttpContext.Session.SetString("UserName", user.Name);
                         HttpContext.Session.SetString("UserRole", user.Rule?.RuleName ?? "User");
+                        HttpContext.Session.SetInt32("UserPoints", (int)(user.TotalPoints ?? 0));
                         // TODO: Implement authentication
                         return RedirectToAction("Index", "Home");
                     }
@@ -58,6 +59,7 @@ namespace theTripChalleng.Controllers.Home
             {
                 // Log the exception (ex) if necessary
                 ModelState.AddModelError("", "An error occurred while processing your request.");
+                ViewData["ErrorMessage"] = "Database connection error: " + ex.Message;
                 //redirect to login page
                 return RedirectToAction("Login");
             }
@@ -85,6 +87,20 @@ namespace theTripChalleng.Controllers.Home
                 .Include(ph => ph.Criteria)
                 .Where(ph => ph.UserId == userId)
                 .ToList();
+
+
+            ViewBag.PendingAssignedCriteria = _context.AssignedCriteras
+            .Where(ac => ac.UserId == userId)
+            .OrderByDescending(ac => ac.CreatedAt)
+            .ToList() // Materialize first
+            .Select(ac => new AssignedCriteriaViewModel
+            {
+                AssignedCriterias = ac,
+                User = _context.Users.Find(ac.UserId),
+                Criteria = _context.Criteria.Find(ac.CriteriaId)
+            })
+            .ToList();
+
 
             var pointsRequests = _context.PointRequests
                 .Include(pr => pr.Criteria)

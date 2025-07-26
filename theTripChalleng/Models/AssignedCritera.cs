@@ -12,4 +12,8 @@ public partial class AssignedCritera
     public long? UserId { get; set; }
 
     public long? CriteriaId { get; set; }
+
+    public bool? Approved { get; set; }
+
+    public bool? IsAdminAction { get; set; }
 }

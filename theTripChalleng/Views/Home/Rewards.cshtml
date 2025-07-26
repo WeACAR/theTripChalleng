@@ -1,8 +1,9 @@
 @* make the page to display the Rewards the user can get in cards showing img, name, min points *@
-@model IEnumerable<theTripChalleng.Models.Reward>
+@model IEnumerable<theTripChalleng.ViewModels.RewardDetailViewModel>
 
 @{
     ViewData["Title"] = "Rewards";
+    var userRole = Context.Session.GetString("UserRole");
 }
 
 <div class="row">
@@ -10,19 +11,34 @@
     {
         <div class="col-md-4">
             <div class="card mb-4">
-                <img src="@(reward.Image != null ? $"data:image/png;base64,{Convert.ToBase64String(reward.Image)}" : "/img/default-reward.png")" class="card-img-top" alt="@reward.Name" />
+                <img src="@(reward.Reward?.Image != null ? $"data:image/png;base64,{Convert.ToBase64String(reward.Reward?.Image)}" : "/img/default-reward.png")"
+                    class="card-img-top" alt="@reward.Reward?.Name" />
                 <div class="card-body text-end">
-                    <h5 class="card-title">@reward.Name</h5>
-                    <p class="card-text">نصاب الجائزة: @reward.MinPoints</p>
-                    <a href="@Url.Action("RewardDetails", "Rewards", new { rewardId = reward.Id })" class="btn btn-primary">التفاصيل</a>
+                    <h5 class="card-title">@reward.Reward?.Name</h5>
+                    <p class="card-text">نصاب الجائزة: @reward.Reward?.MinPoints</p>
+                    <p class="card-text">الفئة: @reward.Category?.CategoryName</p>
+                    <p class="card-text">الوصف: @reward.Reward?.Description</p>
                 </div>
             </div>
         </div>
     }
 </div>
-    @if (!Model.Any())
+
+@* add reward button same as add points in Index page at the bottom of the page*@
+<div class="mt-auto d-flex position-fixed bottom-0 mb-5">
+
+    @* add request points button only visible to user with rule admin *@
+    @if (userRole == "Admin")
     {
-        <div class="alert alert-info">
-            No rewards available at the moment.
+        <div class="ms-3">
+            <a href="@Url.Action("AddReward", "Home")" class="btn btn-primary ms-auto">إضافة جائزة</a>
         </div>
     }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No rewards available at the moment.
+    </div>
+}

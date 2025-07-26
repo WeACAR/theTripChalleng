@@ -1,0 +1,80 @@
+@model dynamic
+
+<h2>المتصدرين حسب اللجان</h2>
+
+<!-- Category Filter Dropdown -->
+<select id="categoryFilter" class="form-select mb-3" style="max-width:300px;">
+    <option value="all">كل الفئات</option>
+    @foreach (var category in Model)
+    {
+        <option value="cat-@category.CategoryId">@category.CategoryName</option>
+    }
+</select>
+
+@foreach (var category in Model)
+{
+    <div class="card mb-4 category-leaderboard" id="cat-@category.CategoryId">
+        <div class="card-header">
+            <h3>@category.CategoryName</h3>
+        </div>
+        <div class="card-body">
+            @if (category.Users.Count > 0)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>الرتبة</th>
+                            <th>الاسم</th>
+                            <th>النقاط</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var rank = 1;
+                        }
+                        @foreach (var user in category.Users)
+                        {
+                            <tr>
+                                <td>@rank</td>
+                                <td>
+                                    @if (user.UserImage != null)
+                                    {
+                                        <img src="data:image/png;base64,@Convert.ToBase64String(user.UserImage)" alt="@user.UserName"
+                                             class="img-fluid rounded-circle" style="width: 40px; height: 40px;" />
+                                    }
+                                    else
+                                    {
+                                        <img src="/Img/Avatar.jpg" alt="@user.UserName" class="img-fluid rounded-circle"
+                                             style="width: 40px; height: 40px;" />
+                                    }
+                                    @user.UserName
+                                </td>
+                                <td>@user.TotalPoints</td>
+                            </tr>
+                            rank++;
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>لا يوجد مستخدمون في هذه الفئة.</p>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts {
+<script>
+    document.getElementById('categoryFilter').addEventListener('change', function() {
+        var selected = this.value;
+        document.querySelectorAll('.category-leaderboard').forEach(function(card) {
+            if (selected === 'all' || card.id === selected) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+}

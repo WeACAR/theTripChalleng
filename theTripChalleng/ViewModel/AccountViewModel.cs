@@ -52,6 +52,13 @@ namespace theTripChalleng.ViewModels
 
     }
 
+    // ViewModel for Reward Detail
+    public class RewardDetailViewModel
+    {
+        public Reward? Reward { get; set; }
+        public Category? Category { get; set; }
+    }
+
     // ViewModel for add reward (same but with image file)
     public class AddRewardViewModel
     {
@@ -59,7 +66,7 @@ namespace theTripChalleng.ViewModels
         public string Description { get; set; }
         public long MinPoints { get; set; }
         public long CategoryId { get; set; }
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
         public byte[]? Image { get; set; } // Optional image field
     }
 

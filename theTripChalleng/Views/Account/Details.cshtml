@@ -32,7 +32,6 @@
                         <li class="list-group-item">
                             <strong>@point.CreatedAt.ToShortDateString()</strong> - @point.Points points
                             <span class="text-muted">@(@point.CriterionName ?? "No Criterion")</span>
-                            <span class="text-muted">@(@point.UserName ?? "No User")</span>
                         </li>
                     }
                 </ul>
@@ -40,6 +39,47 @@
             else
             {
                 <p>No points history available.</p>
+            }
+        </div>
+
+        <div class="card mt-3">
+            <h3>Assigned Criteria</h3>
+            @{
+                var assignedCriteria = ViewBag.PendingAssignedCriteria as IEnumerable<theTripChalleng.ViewModels.AssignedCriteriaViewModel>;
+            }
+            @if (assignedCriteria != null && assignedCriteria.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var assigned in assignedCriteria.OrderByDescending(a => a.AssignedCriterias?.CreatedAt))
+                    {
+                        <li class="list-group-item">
+                            <strong>@assigned.AssignedCriterias?.CreatedAt.ToShortDateString()</strong> - @assigned.Criteria?.CriteriaName
+                            <span class="text-muted">
+                                @* style if the value true or false or not yet approved by checking IsAdminAction *@
+                                @if (assigned.AssignedCriterias?.IsAdminAction == true)
+                                {
+                                    <span class="badge @(assigned.AssignedCriterias?.Approved == true ? "bg-success" : "bg-danger")">
+                                    @if (assigned.AssignedCriterias?.Approved == true )
+                                    {
+                                        <i class="bi bi-check-circle-fill"></i> <span>مقبولة</span>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-x-circle-fill"></i> <span>مرفوضة</span>
+                                    }
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">في انتظار الموافقة</span>
+                                }
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No assigned criteria available.</p>
             }
         </div>
 
@@ -53,7 +93,21 @@
                         <li class="list-group-item">
                             <strong>@request.CreatedAt.ToShortDateString()</strong> - @request.RequestedPoints points
                             <span class="text-muted">@request.CriterionName</span>
-                            <span class="badge bg-secondary">@request.StatusName</span>
+                            @* add if statment for the status if pending, approved or rejected *@
+                            <span class="badge @(request.StatusName == "Approved" ? "bg-success" : request.StatusName == "Rejected" ? "bg-danger" : "bg-warning")">
+                                @if (request.StatusName == "Approved")
+                                {
+                                    <i class="bi bi-check-circle-fill"></i> <span>مقبولة</span>
+                                }
+                                else if (request.StatusName == "Rejected")
+                                {
+                                    <i class="bi bi-x-circle-fill"></i> <span>مرفوضة</span>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-clock-fill"></i> <span>في انتظار الموافقة</span>
+                                }
+                            </span>
                         </li>
                     }
                 </ul>
