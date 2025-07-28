@@ -158,6 +158,11 @@
             }
         </div>
 
+        <div class="mb-3">
+            <input type="text" id="userSearch" class="form-control" placeholder="ابحث عن مستخدم بالاسم..." style="max-width:300px;">
+        </div>
+        <div id="searchResult" class="mb-3"></div>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -170,26 +175,29 @@
                 @{
                     var rank = 1;
                 }
-                @foreach (var user in Model.Leaderboard.OrderByDescending(u => u.TotalPoints).Take(10))
+                @if (Model.Leaderboard != null)
                 {
-                    <tr>
-                        <td>@rank</td>
-                        <td>
-                            @if (user.Image != null)
-                            {
-                                <img src="data:image/png;base64,@Convert.ToBase64String(user.Image)" alt="@user.Name"
-                                    class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
-                            }
-                            else
-                            {
-                                <img src="/Img/Avatar.jpg" alt="@user.Name" class="img-fluid rounded-circle"
-                                    style="width: 50px; height: 50px;" />
-                            }
-                            @user.Name
-                        </td>
-                        <td>@user.TotalPoints</td>
-                    </tr>
-                    rank++;
+                    foreach (var user in Model.Leaderboard.OrderByDescending(u => u.TotalPoints))
+                    {
+                        <tr>
+                            <td>@rank</td>
+                            <td>
+                                @if (user.Image != null)
+                                {
+                                    <img src="data:image/png;base64,@Convert.ToBase64String(user.Image)" alt="@user.Name"
+                                        class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
+                                }
+                                else
+                                {
+                                    <img src="/Img/Avatar.jpg" alt="@user.Name" class="img-fluid rounded-circle"
+                                        style="width: 50px; height: 50px;" />
+                                }
+                                @user.Name
+                            </td>
+                            <td>@user.TotalPoints</td>
+                        </tr>
+                        rank++;
+                    }
                 }
             </tbody>
         </table>
@@ -228,5 +236,38 @@
             e.stopPropagation();
         });
     });
+
+    document.getElementById('userSearch').addEventListener('input', function() {
+    var search = this.value.trim().toLowerCase();
+    var rows = document.querySelectorAll('.table tbody tr');
+    var found = false;
+    var resultDiv = document.getElementById('searchResult');
+    resultDiv.innerHTML = '';
+
+    if (search.length === 0) {
+        rows.forEach(function(row) { 
+            row.style.display = ''; 
+        });
+        return;
+    }
+
+    rows.forEach(function(row) {
+        var nameCell = row.querySelector('td:nth-child(2)');
+        if (nameCell && nameCell.textContent.trim().toLowerCase().includes(search)) {
+            row.style.display = '';
+            found = true;
+            // Optionally, show user info as before
+            var rank = row.querySelector('td:nth-child(1)').textContent.trim();
+            var name = nameCell.textContent.trim();
+            var points = row.querySelector('td:nth-child(3)').textContent.trim();
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    if (!found) {
+        resultDiv.innerHTML = '<div class="alert alert-warning">لا يوجد مستخدم بهذا الاسم.</div>';
+    }
+});
 </script>
 }
