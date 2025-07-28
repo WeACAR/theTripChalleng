@@ -44,6 +44,8 @@ namespace theTripChalleng.ViewModels
 
         public int? RegisteredItemsCount { get; set; }
 
+        public List<Category>? Categories { get; set; }
+
     }
 
     // ViewModel for Reward Detail
