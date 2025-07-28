@@ -48,8 +48,12 @@ namespace theTripChalleng.Controllers.Home
                         HttpContext.Session.SetString("UserName", user.Name);
                         HttpContext.Session.SetString("UserRole", user.Rule?.RuleName ?? "User");
                         HttpContext.Session.SetInt32("UserPoints", (int)(user.TotalPoints ?? 0));
+                        // store the user rank by getting his points and sorting the users by points
+                        var users = _context.Users.ToList();
+                        var userRank = users.OrderByDescending(u => u.TotalPoints).ToList().IndexOf(user) + 1;
+                        HttpContext.Session.SetInt32("UserRank", userRank);
                         // TODO: Implement authentication
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Details", "Account");
                     }
                     ModelState.AddModelError("", "Invalid login attempt.");
                 }
@@ -108,6 +112,16 @@ namespace theTripChalleng.Controllers.Home
                 .Where(pr => pr.UserId == userId)
                 .ToList();
 
+            // get value of TotalItemsCount (total number of criterias in the DB) and RegisteredItemsCount (total number of criterias recorded for the user in history table)
+            var totalItemsCount = _context.Criteria.Count();
+
+            // Get total number of criterias recorded for the user in history table (distinct by CriteriaId)
+            var registeredItemsCount = _context.PointsHistories
+                .Where(ph => ph.UserId == userId && ph.CriteriaId != null)
+                .Select(ph => ph.CriteriaId)
+                .Distinct()
+                .Count();
+
             // ✅ Now just map to ViewModels (values already loaded)
             var historyVM = pointsHistory.Select(ph => new PointsHistoryViewModel
             {
@@ -139,7 +153,9 @@ namespace theTripChalleng.Controllers.Home
                 User = user,
                 PointsHistory = historyVM,
                 PointsRequests = requestsVM,
-                RoleName = user.Rule?.RuleName
+                RoleName = user.Rule?.RuleName ?? string.Empty,
+                TotalItemsCount = totalItemsCount,
+                RegisteredItemsCount = registeredItemsCount
             };
 
             return View(model);

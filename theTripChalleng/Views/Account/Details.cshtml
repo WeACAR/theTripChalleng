@@ -1,49 +1,91 @@
 @* this is the account details page shows user information: Image, Name, Phone Number, Total Points with edit option (for edit all fields) *@
 @model theTripChalleng.ViewModels.UserDetailsViewModel
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>User Details</h2>
-        @* if model image is null then set default image to avatar *@
-        @if (Model.User.Image == null)
-        {
-            <img src="/Img/Avatar.jpg" alt="@Model.User.Name" class="img-fluid" />
-        }
-        else
-        {
-            <img src="data:image/png;base64,@Convert.ToBase64String(Model.User.Image)" alt="@Model.User.Name"
-                class="img-fluid rounded-circle" />
-        }
-    </div>
-    <div class="col-md-8">
-        <div class="card p-2 align-items-start">
-            <h2>@Model.User.Name</h2>
-            <p><strong>Phone Number:</strong> @Model.User.Phone</p>
-            <p><strong>Total Points:</strong> @Model.User.TotalPoints</p>
-            <a href="@Url.Action("Edit", "Account", new { id = Model.User.Id })" class="btn btn-primary ms-auto">Edit</a>
+@{
+    ViewData["Title"] = "تفاصيل الحساب";
+    var userId = Context.Session.GetString("UserId");
+    var createdAt = Model.User?.CreatedAt;
+    var daysSinceCreated = (DateTime.Now - createdAt.Value).Days;
+                        @* check percentage of registedred items compared to total *@
+                        var registeredItemsCount = Model.RegisteredItemsCount;
+                        var totalItemsCount = Model.TotalItemsCount;
+                        var percentage = (registeredItemsCount / (double?)totalItemsCount) * 100;
+}
+<div class="row m-0 mb-4" dir="rtl">
+    <div class="col-md-12 card rounded-5 align-items-start shadow-none p-4" style="background-color: #755DFE;">
+        <div class="d-flex justify-content-between w-100">
+            <div class="d-flex flex-column">
+                <div class="rounded-4 p-2 mb-3 bg-white text-black">
+                    <span>لقد سجلت منذ <strong>@Model.User?.CreatedAt.ToString("dd/MM/yyyy")</strong></span>
+                </div>
+                <h2 class="text-white mb-3">يا هلا, @Model.User?.Name</h2>
+            </div>
+            <img src="/Img/illustration.svg" class="img-fluid w-25 mb-n8 mt-n8" alt="">
         </div>
-        <div class="card mt-3">
-            <h3>Points History</h3>
+        <div class="w-100 rounded-5 p-3 bg-white text-black">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2>سجلت في <strong>@Model.RegisteredItemsCount</strong>\<strong>@Model.TotalItemsCount</strong> من البنود</h2>
+                @* write how many days since created *@
+                @{
+                    if (createdAt.HasValue)
+                    {
+                        @* add google icon *@
+                        @* add arabic saudi text of percentage with icon *@
+                        <span class="ms-2">
+                            <span>ما حققت إلا <strong>@((percentage ?? 0).ToString("0.##"))</strong>٪ بس!!!</span>
+                            <i class="bi bi-flag-fill text-muted"></i>
+                        </span>
+                    }
+                }
+            </div>
+            @* make a progress line bar *@
+            <div class="progress rounded-pill" style="background-color: #DADBFC;">
+                <div class="progress-bar rounded-pill" role="progressbar" style="width: @((percentage ?? 0).ToString("0.##"))%; background-color: #3F4DF5;" aria-valuenow="@((percentage ?? 0).ToString("0.##"))" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4" dir="rtl">
+    <div class="col-md-12">
+        <h2>سجل النقاط</h2>
+        <div class="card rounded-5 mt-3 p-4">
             @if (Model.PointsHistory.Any())
             {
-                <ul class="list-group">
+                <ul class="list-group gap-2">
                     @foreach (var point in Model.PointsHistory.OrderByDescending(p => p.CreatedAt))
                     {
-                        <li class="list-group-item">
-                            <strong>@point.CreatedAt.ToShortDateString()</strong> - @point.Points points
+                        <li class="list-group-item border-1 gap-2 rounded-3 d-flex flex-column align-items-start">
+                            <div class="d-flex gap-2">
+                            <span><strong>@point.CreatedAt.ToShortDateString()</strong> - @point.Points points</span>
                             <span class="text-muted">@(@point.CriterionName ?? "No Criterion")</span>
+                            </div>
                         </li>
                     }
                 </ul>
             }
             else
             {
-                <p>No points history available.</p>
+                <p>لا توجد سجلات نقاط متاحة.</p>
             }
         </div>
 
         <div class="card mt-3">
-            <h3>Assigned Criteria</h3>
+            @* add filter for the state of the assigned criteria *@
+            <div class="d-flex justify-content-between align-items-center mb-3 p-2">
+                <label for="assignedCriteriaFilter">تصفية حسب الحالة:</label>
+                <div class="form-group d-flex">
+                    <select id="assignedCriteriaFilter" class="form-select" style="max-width:300px;">
+                        <option value="all">كل الحالات</option>
+                        <option value="pending">في انتظار الموافقة</option>
+                        <option value="approved">مقبولة</option>
+                        <option value="rejected">مرفوضة</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <h3>البنود المسندة</h3>
             @{
                 var assignedCriteria = ViewBag.PendingAssignedCriteria as IEnumerable<theTripChalleng.ViewModels.AssignedCriteriaViewModel>;
             }
@@ -52,7 +94,10 @@
                 <ul class="list-group">
                     @foreach (var assigned in assignedCriteria.OrderByDescending(a => a.AssignedCriterias?.CreatedAt))
                     {
-                        <li class="list-group-item">
+                         var status = assigned.AssignedCriterias?.IsAdminAction != true ? "pending"
+                                        : assigned.AssignedCriterias?.Approved == true ? "approved"
+                                        : "rejected";
+                        <li class="list-group-item" data-status="@status">
                             <strong>@assigned.AssignedCriterias?.CreatedAt.ToShortDateString()</strong> - @assigned.Criteria?.CriteriaName
                             <span class="text-muted">
                                 @* style if the value true or false or not yet approved by checking IsAdminAction *@
@@ -79,12 +124,12 @@
             }
             else
             {
-                <p>No assigned criteria available.</p>
+                <p>لا توجد بنود مسندة متاحة.</p>
             }
         </div>
 
         <div class="card mt-3">
-            <h3>Points Requests</h3>
+            <h3>طلبات النقاط</h3>
             @if (Model.PointsRequests.Any())
             {
                 <ul class="list-group">
@@ -114,8 +159,29 @@
             }
             else
             {
-                <p>No points requests available.</p>
+                <p>لا توجد طلبات نقاط متاحة.</p>
             }
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        $('#assignedCriteriaFilter').change(function () {
+            var selectedStatus = $(this).val();
+            // Find the closest card and only filter its list-group-items
+            var $card = $(this).closest('.card');
+            $card.find('.list-group-item[data-status]').each(function () {
+                var itemStatus = $(this).data('status');
+                if (selectedStatus === 'all' || itemStatus === selectedStatus) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>
+}
