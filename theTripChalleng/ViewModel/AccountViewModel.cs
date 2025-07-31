@@ -16,6 +16,8 @@ namespace theTripChalleng.ViewModels
         public string? Phone { get; set; }
         public string? Password { get; set; }
         public string? ConfirmPassword { get; set; }
+        public byte[]? Image { get; set; } // Optional image field
+        public IFormFile? ImageFile { get; set; } // Optional image file for upload
     }
 
     // edit profile view model

@@ -1,0 +1,54 @@
+@model theTripChalleng.ViewModels.RegisterViewModel
+
+@* create a registration form containing the following fields: Name, Phone, Password, Confirm Password, and image upload *@
+<form asp-action="Register" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" maxlength="10" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input type="password" asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ConfirmPassword"></label>
+        <input type="password" asp-for="ConfirmPassword" class="form-control" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Image"></label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+
+<script>
+    let phoneValid = true;
+    document.getElementById('Phone').addEventListener('blur', function () {
+        var phone = this.value;
+        var span = document.querySelector('[data-valmsg-for="Phone"]');
+        var btn = document.querySelector('button[type="submit"]');
+        if (!phone) return;
+
+        fetch('/Account/IsPhoneAvailable?phone=' + encodeURIComponent(phone))
+            .then(response => response.json())
+            .then(isAvailable => {
+                phoneValid = isAvailable;
+                if (!isAvailable) {
+                    span.textContent = 'رقم الجوال مسجل مسبقاً.';
+                    btn.disabled = true;
+                } else {
+                    span.textContent = '';
+                    btn.disabled = false;
+                }
+            });
+    });
+</script>

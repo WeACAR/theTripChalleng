@@ -267,7 +267,21 @@ namespace theTripChalleng.Controllers.Home
         [HttpPost]
         public IActionResult Register(RegisterViewModel model)
         {
+            if (model.ImageFile != null)
+            {
+                const long maxFileSize = 2 * 1024 * 1024; // 2 MB
+                if (model.ImageFile.Length > maxFileSize)
+                {
+                    ModelState.AddModelError("ImageFile", "يجب أن يكون حجم الصورة أقل من 2 ميجابايت.");
+                    return View(model);
+                }
 
+                using (var memoryStream = new MemoryStream())
+                {
+                    model.ImageFile.CopyTo(memoryStream);
+                    model.Image = memoryStream.ToArray();
+                }
+            }
             if (model.Password != model.ConfirmPassword)
             {
                 ModelState.AddModelError("", "Passwords do not match.");
@@ -280,6 +294,7 @@ namespace theTripChalleng.Controllers.Home
                     Name = model.Name,
                     Phone = model.Phone,
                     Password = model.Password,
+                    Image = model.Image,
                     RuleId = 2,
                     TotalPoints = 0,
                     CreatedAt = DateTime.Now
@@ -289,6 +304,13 @@ namespace theTripChalleng.Controllers.Home
                 return RedirectToAction("Login");
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public JsonResult IsPhoneAvailable(string phone)
+        {
+            bool exists = _context.Users.Any(u => u.Phone == phone);
+            return Json(!exists); // true if available, false if taken
         }
 
         // Logout action

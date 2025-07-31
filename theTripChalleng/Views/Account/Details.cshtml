@@ -70,8 +70,8 @@
             }
         </div>
 
-        <div class="card mt-3">
-            @* add filter for the state of the assigned criteria *@
+        <h2 class="mt-4">البنود المسندة</h2>
+        @* add filter for the state of the assigned criteria *@
             <div class="d-flex justify-content-between align-items-center mb-3 p-2">
                 <label for="assignedCriteriaFilter">تصفية حسب الحالة:</label>
                 <div class="form-group d-flex">
@@ -84,8 +84,8 @@
                 </div>
             </div>
 
+        <div class="card rounded-5 mt-3 p-4">
 
-            <h3>البنود المسندة</h3>
             @{
                 var assignedCriteria = ViewBag.PendingAssignedCriteria as IEnumerable<theTripChalleng.ViewModels.AssignedCriteriaViewModel>;
             }
@@ -128,8 +128,20 @@
             }
         </div>
 
-        <div class="card mt-3">
-            <h3>طلبات النقاط</h3>
+
+        <h2 class="mt-4">طلبات النقاط</h2>
+        @* add filter for the state of the points requests *@
+        <div class="form-group d-flex justify-content-between align-items-center mb-3">
+            <label for="pointsRequestsFilter">تصفية حسب الحالة:</label>
+            <select id="pointsRequestsFilter" class="form-select" style="max-width:300px;">
+                <option value="all">كل الحالات</option>
+                <option value="pending">في انتظار الموافقة</option>
+                <option value="approved">مقبولة</option>
+                <option value="rejected">مرفوضة</option>
+            </select>
+        </div>
+
+        <div class="card rounded-5 mt-3 p-4">
             @if (Model.PointsRequests.Any())
             {
                 <ul class="list-group">
@@ -176,6 +188,22 @@
             $card.find('.list-group-item[data-status]').each(function () {
                 var itemStatus = $(this).data('status');
                 if (selectedStatus === 'all' || itemStatus === selectedStatus) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $('#pointsRequestsFilter').change(function () {
+            var selectedStatus = $(this).val();
+            // Find the closest card and only filter its list-group-items
+            var $card = $(this).closest('.card');
+            $card.find('.list-group-item').each(function () {
+                var itemStatus = $(this).find('.badge').text().trim();
+                if (selectedStatus === 'all' || itemStatus.includes(selectedStatus)) {
                     $(this).show();
                 } else {
                     $(this).hide();
