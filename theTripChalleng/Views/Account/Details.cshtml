@@ -70,10 +70,10 @@
             }
         </div>
 
+        <div class="d-flex justify-content-between">
         <h2 class="mt-4">البنود المسندة</h2>
         @* add filter for the state of the assigned criteria *@
-            <div class="d-flex justify-content-between align-items-center mb-3 p-2">
-                <label for="assignedCriteriaFilter">تصفية حسب الحالة:</label>
+            <div class="d-flex justify-content-between align-items-center mt-4 p-2">
                 <div class="form-group d-flex">
                     <select id="assignedCriteriaFilter" class="form-select" style="max-width:300px;">
                         <option value="all">كل الحالات</option>
@@ -83,21 +83,22 @@
                     </select>
                 </div>
             </div>
+        </div>
 
-        <div class="card rounded-5 mt-3 p-4">
+        <div class="card rounded-5 mt-2 p-4">
 
             @{
                 var assignedCriteria = ViewBag.PendingAssignedCriteria as IEnumerable<theTripChalleng.ViewModels.AssignedCriteriaViewModel>;
             }
             @if (assignedCriteria != null && assignedCriteria.Any())
             {
-                <ul class="list-group">
+                <ul class="list-group gap-2 assigned-criteria-list">
                     @foreach (var assigned in assignedCriteria.OrderByDescending(a => a.AssignedCriterias?.CreatedAt))
                     {
                          var status = assigned.AssignedCriterias?.IsAdminAction != true ? "pending"
                                         : assigned.AssignedCriterias?.Approved == true ? "approved"
                                         : "rejected";
-                        <li class="list-group-item" data-status="@status">
+                        <li class="list-group-item border-1 gap-2 rounded-3 d-flex align-items-start" data-status="@status">
                             <strong>@assigned.AssignedCriterias?.CreatedAt.ToShortDateString()</strong> - @assigned.Criteria?.CriteriaName
                             <span class="text-muted">
                                 @* style if the value true or false or not yet approved by checking IsAdminAction *@
@@ -128,26 +129,27 @@
             }
         </div>
 
+        <div class="d-flex justify-content-between">
+            <h2 class="mt-4">طلبات النقاط</h2>
+            @* add filter for the state of the points requests *@
+            <div class="form-group d-flex justify-content-between align-items-center mt-4">
+                <select id="pointsRequestsFilter" class="form-select" style="max-width:300px;">
+                    <option value="all">كل الحالات</option>
+                    <option value="pending">في انتظار الموافقة</option>
+                    <option value="approved">مقبولة</option>
+                    <option value="rejected">مرفوضة</option>
+                </select>
+            </div>
 
-        <h2 class="mt-4">طلبات النقاط</h2>
-        @* add filter for the state of the points requests *@
-        <div class="form-group d-flex justify-content-between align-items-center mb-3">
-            <label for="pointsRequestsFilter">تصفية حسب الحالة:</label>
-            <select id="pointsRequestsFilter" class="form-select" style="max-width:300px;">
-                <option value="all">كل الحالات</option>
-                <option value="pending">في انتظار الموافقة</option>
-                <option value="approved">مقبولة</option>
-                <option value="rejected">مرفوضة</option>
-            </select>
         </div>
 
-        <div class="card rounded-5 mt-3 p-4">
+        <div class="card rounded-5 mt-2 p-4">
             @if (Model.PointsRequests.Any())
             {
-                <ul class="list-group">
+                <ul class="list-group gap-2 points-requests-list">
                     @foreach (var request in Model.PointsRequests.OrderByDescending(r => r.CreatedAt))
                     {
-                        <li class="list-group-item">
+                        <li class="list-group-item border-1 gap-2 rounded-3 d-flex align-items-start" data-status="@request.StatusName?.ToLower()">
                             <strong>@request.CreatedAt.ToShortDateString()</strong> - @request.RequestedPoints points
                             <span class="text-muted">@request.CriterionName</span>
                             @* add if statment for the status if pending, approved or rejected *@
@@ -180,36 +182,36 @@
 
 @section Scripts {
 <script>
-    $(document).ready(function () {
-        $('#assignedCriteriaFilter').change(function () {
-            var selectedStatus = $(this).val();
-            // Find the closest card and only filter its list-group-items
-            var $card = $(this).closest('.card');
-            $card.find('.list-group-item[data-status]').each(function () {
-                var itemStatus = $(this).data('status');
-                if (selectedStatus === 'all' || itemStatus === selectedStatus) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
+document.addEventListener('DOMContentLoaded', function () {
+    // Assigned Criteria Filter
+    document.getElementById('assignedCriteriaFilter').addEventListener('change', function () {
+        var selectedStatus = this.value;
+        var list = document.querySelector('.assigned-criteria-list');
+        if (!list) return;
+        list.querySelectorAll('li[data-status]').forEach(function (item) {
+            var itemStatus = item.getAttribute('data-status');
+            if (selectedStatus === 'all' || itemStatus === selectedStatus) {
+                item.classList.remove('d-none');
+            } else {
+                item.classList.add('d-none');
+            }
         });
     });
 
-    $(document).ready(function () {
-        $('#pointsRequestsFilter').change(function () {
-            var selectedStatus = $(this).val();
-            // Find the closest card and only filter its list-group-items
-            var $card = $(this).closest('.card');
-            $card.find('.list-group-item').each(function () {
-                var itemStatus = $(this).find('.badge').text().trim();
-                if (selectedStatus === 'all' || itemStatus.includes(selectedStatus)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
+   // Points Requests Filter
+    document.getElementById('pointsRequestsFilter').addEventListener('change', function () {
+        var selectedStatus = this.value;
+        var list = document.querySelector('.points-requests-list');
+        if (!list) return;
+        list.querySelectorAll('li[data-status]').forEach(function (item) {
+            var itemStatus = item.getAttribute('data-status');
+            if (selectedStatus === 'all' || itemStatus === selectedStatus) {
+                item.classList.remove('d-none');
+            } else {
+                item.classList.add('d-none');
+            }
         });
     });
+});
 </script>
 }
