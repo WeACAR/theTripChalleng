@@ -88,9 +88,14 @@ namespace theTripChalleng.Controllers.Points
         {
             if (ModelState.IsValid)
             {
+                var userId = HttpContext.Session.GetInt32("UserId");
+                if (userId == null)
+                {
+                    return RedirectToAction("Login");
+                }
                 var pointRequest = new PointRequest
                 {
-                    UserId = HttpContext.Session.GetInt32("UserId").Value,
+                    UserId = userId.Value,
                     CriteriaId = model.CriterionId,
                     RequestedPoints = model.RequestedPoints,
                     Proof = model.Proof,
