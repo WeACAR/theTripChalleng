@@ -1,5 +1,10 @@
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Debug\net6.0\publish\web.config
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Debug\net6.0\appsettings.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Debug\net6.0\publish\appsettings.Development.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Debug\net6.0\publish\appsettings.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Debug\net6.0\publish\theTripChalleng.deps.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Debug\net6.0\publish\theTripChalleng.runtimeconfig.json
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Debug\net6.0\theTripChalleng.staticwebassets.runtime.json
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Debug\net6.0\theTripChalleng.exe
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Debug\net6.0\theTripChalleng.deps.json
