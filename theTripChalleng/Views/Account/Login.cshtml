@@ -1,41 +1,42 @@
 @model theTripChalleng.ViewModels.LoginViewModel
 
-@* create a simple login form *@
-<form method="post" asp-action="Login">
-    <div>
-        <label asp-for="Phone">رقم الهاتف</label>
-        <input asp-for="Phone" maxlength="10" />
-    </div>
-    <div>
-        <label asp-for="Password">كلمة المرور</label>
-        <input asp-for="Password" type="password" />
-    </div>
+<div class="container p-4 col-md-6 col-lg-4 mt-5">
+    <h2 class="text-center mb-4">تسجيل الدخول</h2>
+    <form method="post" dir="rtl" asp-action="Login">
+        <div class="d-flex flex-column">
+            <label asp-for="Phone">رقم الهاتف</label>
+            <input asp-for="Phone" maxlength="10" />
+        </div>
+        <div class="d-flex flex-column">
+            <label asp-for="Password">كلمة المرور</label>
+            <input asp-for="Password" type="password" />
+        </div>
 
-    <div class="text-danger fs-6">
-        <p>هل نسيت كلمة المرور؟</p>
-        <p>يرجى الاتصال بالمسؤول لإعادة تعيين كلمة المرور الخاصة بك.</p>
-    </div>
-    
-    <button type="submit">تسجيل الدخول</button>
-    <a href="@Url.Action("Register", "Account")" class="btn">ليس لديك حساب؟ سجل الآن</a>
-</form>
+        <div class="text-muted fs-6">
+            <p>هل نسيت كلمة المرور؟ (صارحني)</p>
+        </div>
 
-@if (!ViewData.ModelState.IsValid)
-{
-    <div class="alert alert-danger">
-        <ul>
-            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <li>@error.ErrorMessage</li>
-            }
-        </ul>
-    </div>
-}
+        <button class="btn btn-primary" type="submit">تسجيل الدخول</button>
+        <a href="@Url.Action("Register", "Account")" class="btn">ليس لديك حساب؟ سجل الآن</a>
+    </form>
 
-@* alert for exceptions *@
-@if (ViewData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">
-        @ViewData["ErrorMessage"]
-    </div>
-}
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    @* alert for exceptions *@
+    @if (ViewData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["ErrorMessage"]
+        </div>
+    }
+</div>

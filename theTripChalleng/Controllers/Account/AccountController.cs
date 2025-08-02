@@ -48,6 +48,7 @@ namespace theTripChalleng.Controllers.Home
                         HttpContext.Session.SetString("UserName", user.Name);
                         HttpContext.Session.SetString("UserRole", user.Rule?.RuleName ?? "User");
                         HttpContext.Session.SetInt32("UserPoints", (int)(user.TotalPoints ?? 0));
+                        HttpContext.Session.SetString("UserImage", user.Image != null ? Convert.ToBase64String(user.Image) : string.Empty);
                         // store the user rank by getting his points and sorting the users by points
                         var users = _context.Users.ToList();
                         var userRank = users.OrderByDescending(u => u.TotalPoints).ToList().IndexOf(user) + 1;

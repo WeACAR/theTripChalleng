@@ -22,10 +22,6 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
-}
-
 .mb-n1 {
   margin-bottom: -0.25rem !important;
 }
@@ -108,4 +104,22 @@ body {
 
 .rounded-7 {
   border-radius: 3rem !important;
+}
+
+
+/* border color #755DFE */
+.border-purple {
+  border-color: #755DFE !important;
+}
+
+/* background color #F3F1FF */
+.bg-light-purple {
+  background-color: #F3F1FF !important;
+}
+
+/* make w-50 with breakpoints md */
+@media (min-width: 768px) {
+  .w-md-50 {
+    width: 50% !important;
+  }
 }

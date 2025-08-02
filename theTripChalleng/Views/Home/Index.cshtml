@@ -2,19 +2,9 @@
 
 @* this page shows a leaderboard of users with columns of image(optionally), name, total points sorted by total points *@
 @{
-    ViewData["Title"] = "Leaderboard";
+    ViewData["PageName"] = "Leaderboard";
     var userRole = Context.Session.GetString("UserRole");
 }
-
-@* make row "Hello, ..." shows user name and points *@
-<div class="row mb-3">
-    <div class="col-md-12">
-        <div class="d-flex justify-content-between align-items-center" style="direction: rtl;">
-            <h1>مرحبا، @Context.Session.GetString("UserName")</h1>
-            <span>نقاطك: @Context.Session.GetInt32("UserPoints")</span>
-        </div>
-    </div>
-</div>
 
 @* row for Criteras that are assignable only *@
 @if (Model.Criterias != null && Model.Criterias.Any())
@@ -57,7 +47,7 @@
                             </span>
                         }
                     </button>
-                    <div class="dropdown-menu dropdown-menu-end">
+                    <div class="dropdown-menu dropdown-menu-end" style="max-height: 250px; overflow-y: auto;">
                         @* make dropdown tabs for pending requests and assigned criteria (tabs in heders to switch between notification type) *@
                         <ul class="nav nav-tabs" id="notificationTabs" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -146,14 +136,14 @@
         </div>
         <div class="mt-auto d-flex mb-2">
             <div>
-                <a href="@Url.Action("RequestPoints", "Points")" class="btn btn-primary ms-auto">طلب نقاط</a>
+                <a href="@Url.Action("RequestPoints", "Points")" class="btn btn-primary ms-auto rounded-4">طلب نقاط</a>
             </div>
 
             @* add request points button only visible to user with rule admin *@
             @if (userRole == "Admin")
             {
                 <div class="ms-3">
-                    <a href="@Url.Action("AddPoints", "Points")" class="btn btn-primary ms-auto">إضافة نقاط</a>
+                    <a href="@Url.Action("AddPoints", "Points")" class="btn btn-primary ms-auto rounded-4">إضافة نقاط</a>
                 </div>
             }
         </div>

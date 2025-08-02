@@ -2,15 +2,53 @@
 @model theTripChalleng.ViewModels.UserDetailsViewModel
 
 @{
+    ViewData["PageName"] = "Account Details";
+    var UserImage = Context.Session.GetString("UserImage");
+}
+
+<style>
+    .cards-list .card{
+        max-height: 250px;
+        overflow-y: auto;
+    }
+</style>
+@{
     ViewData["Title"] = "تفاصيل الحساب";
     var userId = Context.Session.GetString("UserId");
     var createdAt = Model.User?.CreatedAt;
-    var daysSinceCreated = (DateTime.Now - createdAt.Value).Days;
+    var daysSinceCreated = createdAt.HasValue ? (DateTime.Now - createdAt.Value).Days : 0;
                         @* check percentage of registedred items compared to total *@
                         var registeredItemsCount = Model.RegisteredItemsCount;
                         var totalItemsCount = Model.TotalItemsCount;
                         var percentage = (registeredItemsCount / (double?)totalItemsCount) * 100;
 }
+
+<div class="row d-block d-md-none">
+    <div class="text-center mt-3 mb-3">
+    <div class="position-relative d-inline-block">
+        @if (UserImage != null)
+        {
+            <img src="data:image/png;base64,@Convert.ToBase64String(Convert.FromBase64String(UserImage))"
+                    alt="@Context.Session.GetString("UserName")" class="img-fluid rounded-circle border border-4 p-1 mb-2"
+                    style="width: 80px; height: 80px;" />
+        }
+        else
+        {
+            <img src="/Img/Avatar.jpg" alt="@Context.Session.GetString("UserName")"
+                    class="img-fluid rounded-circle border border-4 p-1 mb-2" style="width: 80px; height: 80px;" />
+        }
+        <a role="button" class="position-absolute bottom-0 text-black start-100 border border-2 rounded-pill cursor-pointer" asp-controller="Account" asp-action="Edit">
+            <i class="bi bi-pencil px-1"></i>
+        </a>
+    </div>
+    <h5 class="mb-0">@Context.Session.GetString("UserName")</h5>
+    <p class="text-muted mb-0">
+        @* Display current rank in Arabic *@
+        رتبتك الحالية <strong>@(@Context.Session.GetInt32("UserRank") ?? 0)</strong>
+    </p>
+</div>
+</div>
+
 <div class="row m-0 mb-4" dir="rtl">
     <div class="col-md-12 card rounded-5 align-items-start shadow-none p-4" style="background-color: #755DFE;">
         <div class="d-flex justify-content-between w-100">
@@ -46,13 +84,13 @@
     </div>
 </div>
 
-<div class="row mb-4" dir="rtl">
+<div class="row cards-list mb-4" dir="rtl">
     <div class="col-md-12">
         <h2>سجل النقاط</h2>
         <div class="card rounded-5 mt-3 p-4">
             @if (Model.PointsHistory.Any())
             {
-                <ul class="list-group gap-2">
+                <ul class="list-group p-0 gap-2">
                     @foreach (var point in Model.PointsHistory.OrderByDescending(p => p.CreatedAt))
                     {
                         <li class="list-group-item border-1 gap-2 rounded-3 d-flex flex-column align-items-start">
@@ -92,13 +130,13 @@
             }
             @if (assignedCriteria != null && assignedCriteria.Any())
             {
-                <ul class="list-group gap-2 assigned-criteria-list">
+                <ul class="list-group p-0 gap-2 assigned-criteria-list">
                     @foreach (var assigned in assignedCriteria.OrderByDescending(a => a.AssignedCriterias?.CreatedAt))
                     {
                          var status = assigned.AssignedCriterias?.IsAdminAction != true ? "pending"
                                         : assigned.AssignedCriterias?.Approved == true ? "approved"
                                         : "rejected";
-                        <li class="list-group-item border-1 gap-2 rounded-3 d-flex align-items-start" data-status="@status">
+                        <li class="list-group-item border-1 gap-2 rounded-3 d-flex align-items-start flex-wrap" data-status="@status">
                             <strong>@assigned.AssignedCriterias?.CreatedAt.ToShortDateString()</strong> - @assigned.Criteria?.CriteriaName
                             <span class="text-muted">
                                 @* style if the value true or false or not yet approved by checking IsAdminAction *@
@@ -146,10 +184,10 @@
         <div class="card rounded-5 mt-2 p-4">
             @if (Model.PointsRequests.Any())
             {
-                <ul class="list-group gap-2 points-requests-list">
+                <ul class="list-group p-0 gap-2 points-requests-list">
                     @foreach (var request in Model.PointsRequests.OrderByDescending(r => r.CreatedAt))
                     {
-                        <li class="list-group-item border-1 gap-2 rounded-3 d-flex align-items-start" data-status="@request.StatusName?.ToLower()">
+                        <li class="list-group-item border-1 gap-2 rounded-3 d-flex align-items-start flex-wrap" data-status="@request.StatusName?.ToLower()">
                             <strong>@request.CreatedAt.ToShortDateString()</strong> - @request.RequestedPoints points
                             <span class="text-muted">@request.CriterionName</span>
                             @* add if statment for the status if pending, approved or rejected *@
