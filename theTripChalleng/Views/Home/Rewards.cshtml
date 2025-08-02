@@ -11,7 +11,7 @@
     {
         <div class="col-md-4">
             <div class="card mb-4">
-                <img src="@(reward.Reward?.Image != null ? $"data:image/png;base64,{Convert.ToBase64String(reward.Reward?.Image)}" : "/img/default-reward.png")"
+                <img src="@(reward.Reward != null && reward.Reward.Image != null ? $"data:image/png;base64,{Convert.ToBase64String(reward.Reward.Image)}" : "/img/default-reward.png")"
                     class="card-img-top" alt="@reward.Reward?.Name" />
                 <div class="card-body text-end">
                     <h5 class="card-title">@reward.Reward?.Name</h5>

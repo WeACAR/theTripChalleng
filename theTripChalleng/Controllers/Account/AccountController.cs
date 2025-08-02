@@ -292,8 +292,8 @@ namespace theTripChalleng.Controllers.Home
             {
                 var user = new User
                 {
-                    Name = model.Name,
-                    Phone = model.Phone,
+                    Name = model.Name ?? string.Empty,
+                    Phone = model.Phone ?? string.Empty,
                     Password = model.Password,
                     Image = model.Image,
                     RuleId = 2,
