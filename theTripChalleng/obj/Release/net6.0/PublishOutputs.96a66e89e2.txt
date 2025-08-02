@@ -1,9 +1,14 @@
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\theTripChalleng.exe
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\publish\publish\web.config
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\publish\web.config
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\appsettings.Development.json
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\appsettings.json
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\publish\appsettings.Development.json
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\publish\appsettings.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\publish\publish\appsettings.Development.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\publish\publish\appsettings.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\publish\publish\theTripChalleng.deps.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\publish\publish\theTripChalleng.runtimeconfig.json
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\publish\theTripChalleng.deps.json
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\publish\theTripChalleng.runtimeconfig.json
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\publish\theTripChalleng.dll

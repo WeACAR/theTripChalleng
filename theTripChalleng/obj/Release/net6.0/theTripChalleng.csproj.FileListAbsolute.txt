@@ -48,3 +48,8 @@ C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Release\net6
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Release\net6.0\publish\appsettings.json
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Release\net6.0\publish\theTripChalleng.deps.json
 C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Release\net6.0\publish\theTripChalleng.runtimeconfig.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Release\net6.0\publish\publish\web.config
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Release\net6.0\publish\publish\appsettings.Development.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Release\net6.0\publish\publish\appsettings.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Release\net6.0\publish\publish\theTripChalleng.deps.json
+C:\Users\yazeed\source\gitRepos\theTripChalleng\theTripChalleng\bin\Release\net6.0\publish\publish\theTripChalleng.runtimeconfig.json
