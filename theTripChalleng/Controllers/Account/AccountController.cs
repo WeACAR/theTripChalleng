@@ -5,7 +5,7 @@ using theTripChalleng.Data;
 using theTripChalleng.Models;
 using theTripChalleng.ViewModel;
 
-// Add the following line if LoginViewModel is in a different namespace z
+// Add the following line if LoginViewModel is in a different namespace 
 using theTripChalleng.ViewModels;
 
 namespace theTripChalleng.Controllers.Home
