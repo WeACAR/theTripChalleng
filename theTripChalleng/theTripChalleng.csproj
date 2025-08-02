@@ -17,7 +17,4 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.8" />
   </ItemGroup>
 
-  <ItemGroup>
-  <Content Include="wwwroot\**\*" CopyToOutputDirectory="PreserveNewest" />
-</ItemGroup>
 </Project>
