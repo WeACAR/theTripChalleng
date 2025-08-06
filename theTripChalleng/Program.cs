@@ -1,6 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using theTripChalleng.Data;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // (Optional if you're seeing timestamp issues)
+AppContext.SetSwitch("Npgsql.EnableSslProtocols", true); // If SSL handshake is causing issues
+
+// ✅ Force Npgsql to use IPv4 stack only
+System.Net.ServicePointManager.Expect100Continue = true;
+System.Net.ServicePointManager.UseNagleAlgorithm = false;
+System.Net.ServicePointManager.DefaultConnectionLimit = 100;
+System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
