@@ -22,7 +22,19 @@ builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 // Configure Entity Framework Core with PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString(
+            "DefaultConnection"
+        ),
+        providerOptions => {
+            providerOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorCodesToAdd: null
+);
+        });
+});
     
 var app = builder.Build();
 
