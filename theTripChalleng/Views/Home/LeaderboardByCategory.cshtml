@@ -8,13 +8,13 @@
 <!-- Category Filter Dropdown -->
 <select id="categoryFilter" class="form-select mb-3" style="max-width:300px;">
     <option value="all">كل الفئات</option>
-    @foreach (var category in Model)
+    @foreach (var category in Model.Take(4))
     {
         <option value="cat-@category.CategoryId">@category.CategoryName</option>
     }
 </select>
 
-@foreach (var category in Model)
+@foreach (var category in Model.Take(4))
 {
     <div class="card mb-4 category-leaderboard" id="cat-@category.CategoryId">
         <div class="card-header">
