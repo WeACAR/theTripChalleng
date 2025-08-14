@@ -84,7 +84,7 @@ namespace theTripChalleng.Controllers
         [HttpGet]
         public IActionResult LeaderboardByCategory()
         {
-            var categories = _context.Categories.ToList();
+            var categories = _context.Categories.Take(4).ToList();
 
             var leaderboard = categories.Select(category => new
             {
