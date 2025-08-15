@@ -9,7 +9,7 @@
         @* set default selected value for category *@
         <label></label>
         <select id="categoryDropdown" class="form-control">
-            <option value="">Select Category</option>
+            <option value="">اختر الفئة</option>
             @foreach (var category in ViewBag.Categories)
             {
                 <option value="@category.Value">@category.Text</option>
@@ -17,21 +17,21 @@
         </select>
     </div>
     <div class="form-group">
-        <label asp-for="CriterionId"></label>
+        <label asp-for="CriterionId">المعيار</label>
         <select id="criteriaDropdown" asp-for="CriterionId" class="form-control">
-            <option value="">Select Criteria</option>
-            
+            <option value="">اختر المعيار</option>
+
         </select>
     </div>
     <div class="form-group">
-        <label asp-for="RequestedPoints"></label>
+        <label asp-for="RequestedPoints">النقاط المطلوبة</label>
         <select asp-for="RequestedPoints" class="form-control" asp-items="ViewBag.AllowedPoints"></select>
     </div>
     <div class="form-group">
-        <label asp-for="Proof"></label>
+        <label asp-for="Proof">الدليل</label>
         <input asp-for="Proof" type="text" class="form-control" />
     </div>
-    <button type="submit" class="btn btn-primary mt-4">Submit</button>
+    <button type="submit" class="btn btn-primary mt-4">إرسال</button>
 </form>
 
 

@@ -10,11 +10,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - theTripChalleng</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        asp-append-version="true">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/theTripChalleng.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"
+        asp-append-version="true" />
 </head>
 
 <body>
@@ -88,15 +90,19 @@
                                     @if (UserImage != null)
                                     {
                                         <img src="data:image/png;base64,@Convert.ToBase64String(Convert.FromBase64String(UserImage))"
-                                             alt="@Context.Session.GetString("UserName")" class="img-fluid rounded-circle border border-4 p-1 mb-2"
-                                             style="width: 80px; height: 80px;" />
+                                            alt="@Context.Session.GetString("UserName")"
+                                            class="img-fluid rounded-circle border border-4 p-1 mb-2"
+                                            style="width: 80px; height: 80px;" />
                                     }
                                     else
                                     {
                                         <img src="/Img/Avatar.jpg" alt="@Context.Session.GetString("UserName")"
-                                             class="img-fluid rounded-circle border border-4 p-1 mb-2" style="width: 80px; height: 80px;" />
+                                            class="img-fluid rounded-circle border border-4 p-1 mb-2"
+                                            style="width: 80px; height: 80px;" />
                                     }
-                                    <a role="button" class="position-absolute bottom-0 text-black start-100 border border-2 rounded-pill cursor-pointer" asp-controller="Account" asp-action="Edit">
+                                    <a role="button"
+                                        class="position-absolute bottom-0 text-black start-100 border border-2 rounded-pill cursor-pointer"
+                                        asp-controller="Account" asp-action="Edit">
                                         <i class="bi bi-pencil px-1"></i>
                                     </a>
                                 </div>
@@ -110,32 +116,56 @@
                                 @* make it only appear after login  fd*@
 
                                 @* check the PageName to add border, *@
-                                <li class="nav-item @(ViewData["PageName"]?.ToString() == "Account Details" ? "border border-2 rounded-4 border-purple bg-light-purple" : "")">
+                                <li
+                                    class="nav-item @(ViewData["PageName"]?.ToString() == "Account Details" ? "border border-2 rounded-4 border-purple bg-light-purple" : "")">
                                     <a class="nav-link" asp-controller="Account" asp-action="Details">
                                         <i class="bi bi-person"></i> <span
-                                            class="d-sm-inline fw-bold @(ViewData["PageName"]?.ToString() == "Account Details" ? "text-black" : "")">صفحتي الخاصة</span>
+                                            class="d-sm-inline fw-bold @(ViewData["PageName"]?.ToString() == "Account Details" ? "text-black" : "")">صفحتي
+                                            الخاصة</span>
                                     </a>
                                 </li>
-                                <li class="nav-item @(ViewData["PageName"]?.ToString() == "Leaderboard" ? "border border-2 rounded-4 border-purple bg-light-purple" : "")">
+                                <li
+                                    class="nav-item @(ViewData["PageName"]?.ToString() == "Leaderboard" ? "border border-2 rounded-4 border-purple bg-light-purple" : "")">
                                     <a class="nav-link" asp-controller="Home" asp-action="Index">
                                         <i class="bi bi-globe-asia-australia-fill"></i> <span
                                             class="d-sm-inline fw-bold @(ViewData["PageName"]?.ToString() == "Leaderboard" ? "text-black" : "")">قائمةالمتصدرين</span>
                                     </a>
                                 </li>
-                                <li class="nav-item @(ViewData["PageName"]?.ToString() == "Rewards" ? "border border-2 rounded-4 border-purple bg-light-purple" : "")">
+                                <li
+                                    class="nav-item @(ViewData["PageName"]?.ToString() == "Emails" ? "border border-2 rounded-4 border-purple bg-light-purple" : "")">
+                                    <a class="nav-link" asp-controller="Email" asp-action="Index">
+                                        <i class="bi bi-envelope"></i> <span
+                                            class="d-sm-inline fw-bold @(ViewData["PageName"]?.ToString() == "Emails" ? "text-black" : "")">البريد</span>
+                                    </a>
+                                </li>
+                                @* <li
+                                    class="nav-item @(ViewData["PageName"]?.ToString() == "Nickname" ? "border border-2 rounded-4 border-purple bg-light-purple" : "")">
+                                    <a class="nav-link" asp-controller="Nickname" asp-action="Index">
+                                        <i class="bi bi-crosshair"></i> <span
+                                            class="d-sm-inline fw-bold @(ViewData["PageName"]?.ToString() == "Nickname" ? "text-black" : "")">الاسم المستعار</span>
+                                    </a>
+                                </li> *@
+
+                                <li
+                                    class="nav-item @(ViewData["PageName"]?.ToString() == "Rewards" ? "border border-2 rounded-4 border-purple bg-light-purple" : "")">
                                     <a class="nav-link" asp-controller="Home" asp-action="Rewards">
-                                        <i class="bi bi-gift"></i> <span class="d-sm-inline fw-bold @(ViewData["PageName"]?.ToString() == "Rewards" ? "text-black" : "")">المكافآت</span>
+                                        <i class="bi bi-gift"></i> <span
+                                            class="d-sm-inline fw-bold @(ViewData["PageName"]?.ToString() == "Rewards" ? "text-black" : "")">المكافآت</span>
                                     </a>
                                 </li>
 
-                                <li class="nav-item @(ViewData["PageName"]?.ToString() == "Leaderboard By Category" ? "border border-2 rounded-4 border-purple bg-light-purple" : "")">
+                                <li
+                                    class="nav-item @(ViewData["PageName"]?.ToString() == "Leaderboard By Category" ? "border border-2 rounded-4 border-purple bg-light-purple" : "")">
                                     <a class="nav-link" asp-controller="Home" asp-action="LeaderboardByCategory">
-                                        <i class="bi bi-trophy"></i> <span class="d-sm-inline fw-bold @(ViewData["PageName"]?.ToString() == "Leaderboard By Category" ? "text-black" : "")">متصدري اللجان</span>
+                                        <i class="bi bi-trophy"></i> <span
+                                            class="d-sm-inline fw-bold @(ViewData["PageName"]?.ToString() == "Leaderboard By Category" ? "text-black" : "")">متصدري
+                                            اللجان</span>
                                     </a>
                                 </li>
                                 <li class="nav-item mt-auto">
                                     <a class="nav-link" asp-controller="Account" asp-action="Logout">
-                                        <i class="bi bi-box-arrow-right text-danger"></i> <span class="d-sm-inline text-danger fw-bold">تسجيل الخروج</span>
+                                        <i class="bi bi-box-arrow-right text-danger"></i> <span
+                                            class="d-sm-inline text-danger fw-bold">تسجيل الخروج</span>
                                     </a>
                                 </li>
 

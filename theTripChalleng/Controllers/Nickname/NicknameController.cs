@@ -1,0 +1,1 @@
+// this controller handles nickname-related actions where there will be one page combining sections of "your nickname", leaderboard (each user's nickname will have actions button controls only by roles admin and Nickname), and rewards

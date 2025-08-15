@@ -1,0 +1,59 @@
+@model IEnumerable<theTripChalleng.Models.Email>
+@using theTripChalleng.Helpers
+
+@{
+    ViewData["PageName"] = "Emails";
+    var userRole = ViewData["UserRole"]?.ToString();
+    var canSendEmails = userRole == EnumHelper.UserRole.Admin.ToString() || userRole == EnumHelper.UserRole.Nickname.ToString();
+}
+
+<h1>@ViewData["PageName"]</h1>
+
+@if (canSendEmails)
+{
+    <p>
+        <a asp-action="Send" class="btn btn-primary">أرسل بريدًا جديدًا</a>
+    </p>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>التاريخ</th>
+                <th>من</th>
+                <th>إلى</th>
+                <th>الرسالة</th>
+                <th>الإجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@(item.SenderNavigation?.Name ?? "Unknown")</td>
+                    <td>@(item.ReceiverNavigation?.Name ?? "Unknown")</td>
+                    <td>@(item.Message?.Length > 50 ? item.Message.Substring(0, 50) + "..." : item.Message)</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center">
+        <p>لا توجد رسائل بريد إلكتروني.</p>
+    </div>
+}

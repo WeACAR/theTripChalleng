@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace theTripChalleng.Models;
-
-public partial class Rule
+namespace theTripChalleng.Models
 {
-    public long Id { get; set; }
+    public partial class Rule
+    {
+        public Rule()
+        {
+            Users = new HashSet<User>();
+        }
 
-    public DateTime CreatedAt { get; set; }
+        public long Id { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string? RuleName { get; set; }
 
-    public string? RuleName { get; set; }
-
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
+        public virtual ICollection<User> Users { get; set; }
+    }
 }

@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace theTripChalleng.Models;
-
-public partial class Category
+namespace theTripChalleng.Models
 {
-    public long Id { get; set; }
+    public partial class Category
+    {
+        public Category()
+        {
+            Criteria = new HashSet<Criterion>();
+            Rewards = new HashSet<Reward>();
+        }
 
-    public DateTime CreatedAt { get; set; }
+        public long Id { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string CategoryName { get; set; } = null!;
 
-    public string CategoryName { get; set; } = null!;
-
-    public virtual ICollection<Criterion> Criteria { get; set; } = new List<Criterion>();
-
-    public virtual ICollection<Reward> Rewards { get; set; } = new List<Reward>();
+        public virtual ICollection<Criterion> Criteria { get; set; }
+        public virtual ICollection<Reward> Rewards { get; set; }
+    }
 }

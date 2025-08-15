@@ -10,7 +10,8 @@ namespace theTripChalleng.Helpers
         public enum UserRole
         {
             Admin = 1,
-            User = 2
+            User = 2,
+            Nickname = 3,
         }
 
         public enum RequestStatus

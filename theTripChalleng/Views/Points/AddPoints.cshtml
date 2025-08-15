@@ -15,7 +15,7 @@
     <div class="form-group">
         <label></label>
         <select id="categoryDropdown" class="form-control">
-            <option value="">Select Category</option>
+            <option value="">اختر الفئة</option>
             @foreach (var category in ViewBag.Categories)
             {
                 <option value="@category.Value">@category.Text</option>
@@ -25,15 +25,15 @@
     <div class="form-group">
         <label asp-for="CriterionId"></label>
         <select id="criteriaDropdown" asp-for="CriterionId" class="form-control">
-            <option value="">Select Criteria</option>
-            
+            <option value="">اختر المعيار</option>
+
         </select>
     </div>
     <div class="form-group">
         <label asp-for="Points"></label>
         <input asp-for="Points" class="form-control" />
     </div>
-    <button type="submit" class="btn btn-primary">Add Points</button>
+    <button type="submit" class="btn btn-primary">إضافة النقاط</button>
 </form>
 @if (!ViewData.ModelState.IsValid)
 {
