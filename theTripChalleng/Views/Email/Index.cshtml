@@ -30,7 +30,6 @@
                 <th>التاريخ</th>
                 <th>من</th>
                 <th>إلى</th>
-                <th>الرسالة</th>
                 <th>الإجراءات</th>
             </tr>
         </thead>
@@ -41,7 +40,6 @@
                     <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@(item.SenderNavigation?.Name ?? "Unknown")</td>
                     <td>@(item.ReceiverNavigation?.Name ?? "Unknown")</td>
-                    <td>@(item.Message?.Length > 50 ? item.Message.Substring(0, 50) + "..." : item.Message)</td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">View</a>
                     </td>
