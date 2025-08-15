@@ -202,7 +202,8 @@ namespace theTripChalleng.Controllers.Home
                 var existingUser = _context.Users.Find((long)user.Id);
                 if (existingUser == null)
                 {
-                    return NotFound();
+                    ModelState.AddModelError("", "User not found.");
+                    return View(user);
                 }
 
                 // if the field is not null, update it
