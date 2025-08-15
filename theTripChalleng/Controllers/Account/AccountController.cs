@@ -210,6 +210,7 @@ namespace theTripChalleng.Controllers.Home
                 if (!string.IsNullOrEmpty(user.Name))
                 {
                     existingUser.Name = user.Name;
+                    HttpContext.Session.SetString("UserName", user.Name);
                 }
 
                 if (!string.IsNullOrEmpty(user.Phone))
@@ -248,6 +249,7 @@ namespace theTripChalleng.Controllers.Home
                     {
                         user.ImageFile.CopyTo(memoryStream);
                         existingUser.Image = memoryStream.ToArray();
+                        HttpContext.Session.SetString("UserImage", existingUser.Image != null ? Convert.ToBase64String(existingUser.Image) : string.Empty);
                     }
                 }
 
