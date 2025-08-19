@@ -63,7 +63,7 @@ namespace theTripChalleng.Controllers
                 .Where(ac => ac.UserId == userId)
                 .Select(ac => ac.CriteriaId)
                 .ToList();
-            var criterias = _context.Criteria.Where(c => c.IsAssignable == true && !assignedCriteriaIds.Contains(c.Id)).ToList();
+            var criterias = _context.Criteria.Where(c => c.IsAssignable == true && !assignedCriteriaIds.Contains(c.Id) && c.AssignLeft > 0).ToList();
             var viewModel = new HomeViewModel
             {
                 Leaderboard = data,

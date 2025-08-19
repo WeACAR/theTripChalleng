@@ -20,8 +20,8 @@
 </head>
 
 <body>
-    <header dir="rtl">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
+    <header dir="rtl" style="height: 47px; ">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow position-fixed w-100" style="z-index: 999; bottom: 0;">
             <div class="container">
 
                 <div class="d-inline-flex w-100 justify-content-between">
@@ -81,7 +81,7 @@
     </header>
 
     <div class="d-flex m-0 min-vh-100">
-        <div class="container col-md-9 col-lg-10 mt-3">
+        <div class="container col-md-9 col-lg-10 mt-3" style="margin-bottom: 47px;">
             <main role="main" class="pb-3">
                 @RenderBody()
             </main>

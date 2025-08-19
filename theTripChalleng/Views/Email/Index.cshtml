@@ -5,6 +5,8 @@
     ViewData["PageName"] = "Emails";
     var userRole = ViewData["UserRole"]?.ToString();
     var canSendEmails = userRole == EnumHelper.UserRole.Admin.ToString() || userRole == EnumHelper.UserRole.Nickname.ToString();
+
+    
 }
 
 <h1>@ViewData["PageName"]</h1>
