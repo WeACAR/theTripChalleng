@@ -258,7 +258,21 @@ namespace theTripChalleng.Controllers.Points
             }
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Home");
+            // Find the next pending request
+            var nextRequest = _context.PointRequests
+                .Where(pr => pr.StatusId == (int)EnumHelper.RequestStatus.Pending && pr.RequestId > pointRequest.RequestId)
+                .OrderBy(pr => pr.RequestId)
+                .FirstOrDefault();
+
+            if (nextRequest != null)
+            {
+                return RedirectToAction("RequestInfo", "Points", new { requestId = nextRequest.RequestId });
+            }
+            else
+            {
+                // No more pending requests, redirect to a list or home page
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }

@@ -1,11 +1,33 @@
 @* display request Information with ability to approve or reject and add admin comments *@
 @model theTripChalleng.Models.PointRequest
 <h2>Request Information</h2>
+
+@* add info if StatusId is 0 (pending), or else (Approved or rejected)*@
+@if (Model.StatusId == 0)
+{
+    <div class="alert alert-warning">
+        This request is pending approval.
+    </div>
+}
+else if (Model.StatusId == 1)
+{
+    <div class="alert alert-success">
+        This request has been approved.
+    </div>
+}
+else if (Model.StatusId == 2)
+{
+    <div class="alert alert-danger">
+        This request has been rejected.
+    </div>
+}
+
 <div>
     <p><strong>User:</strong> @Model.User.Name</p>
     <p><strong>Criteria:</strong> @Model.Criteria.CriteriaName</p>
     <p><strong>Requested Points:</strong> @Model.RequestedPoints</p>
     <p><strong>Status:</strong> @Model.Status.StatusName</p>
+    <p><strong>Proof:</strong> @Model.Proof?</p>
 </div>
 <div>
     <p><strong>Request Date:</strong> @Model.CreatedAt.ToString("g")</p>
@@ -28,3 +50,9 @@
     <button type="submit" class="btn btn-success" name="action" value="approve">Approve</button>
     <button type="submit" class="btn btn-danger" name="action" value="reject">Reject</button>
 </form>
+
+@* add "Next" and "Previous" buttons *@
+<div class="form-group mt-2">
+    <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("RequestInfo", "Points", new { requestId = Model.RequestId - 1 })'">Previous</button>
+    <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("RequestInfo", "Points", new { requestId = Model.RequestId + 1 })'">Next</button>
+</div>

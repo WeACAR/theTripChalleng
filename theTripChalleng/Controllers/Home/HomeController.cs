@@ -80,6 +80,70 @@ namespace theTripChalleng.Controllers
             return View(viewModel);
         }
 
+                // This action is protected by the SessionAuthorize attribute
+        [SessionAuthorize]
+        public IActionResult SetRequests()
+        {
+            // viewbag for pending requestPoints and assigned criteria not approved yet
+            ViewBag.PendingAssignedCriteriaCount = _context.AssignedCriteras
+                .Where(ac => ac.IsAdminAction == false)
+                .Count();
+            ViewBag.PendingRequestsCount = _context.PointRequests
+                .Where(pr => pr.StatusId == (int)EnumHelper.RequestStatus.Pending)
+                .Count();
+
+            // make it show both pending requests and assigned criteria that not approved yet in one ViewBag
+            // list the viewmodel AssignedCriteriaViewModel
+            ViewBag.PendingAssignedCriteria = _context.AssignedCriteras
+            .Where(ac => ac.IsAdminAction == false)
+            .OrderByDescending(ac => ac.CreatedAt)
+            .ToList() // Materialize first
+            .Select(ac => new AssignedCriteriaViewModel
+            {
+                AssignedCriterias = ac,
+                User = _context.Users.Find(ac.UserId),
+                Criteria = _context.Criteria.Find(ac.CriteriaId)
+            })
+            .ToList();
+
+            ViewBag.PendingRequests = _context.PointRequests
+                .Where(pr => pr.StatusId == (int)EnumHelper.RequestStatus.Pending)
+                .OrderByDescending(pr => pr.CreatedAt)
+                .ToList();
+            //check session and redirect
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+
+            ViewData["Title"] = "MVC";
+            var data = _context.Users.ToList();
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "Account");
+            var assignedCriteriaIds = _context.AssignedCriteras
+                .Where(ac => ac.UserId == userId)
+                .Select(ac => ac.CriteriaId)
+                .ToList();
+            var criterias = _context.Criteria.Where(c => c.IsAssignable == true && !assignedCriteriaIds.Contains(c.Id) && c.AssignLeft > 0).ToList();
+            var viewModel = new HomeViewModel
+            {
+                Leaderboard = data,
+                Criterias = criterias
+            };
+
+            var categories = _context.Categories.ToList();
+            ViewBag.Categories = categories.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.CategoryName
+            }).ToList();
+
+            return View(viewModel);
+        }
+
         //make an action to display users leaderboard by category (view) where it gets all users for all categories (check if the user have history in the categories) then inside the view it will filter by category
         [HttpGet]
         public IActionResult LeaderboardByCategory()
